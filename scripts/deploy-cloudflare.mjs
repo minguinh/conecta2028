@@ -34,5 +34,7 @@ else {run('mkdir',['-p','.open-next']);run('unzip',['-oq','.cloudflare-artifacts
 if(existsSync('.env.production.local'))run(process.execPath,['--env-file=.env.production.local','node_modules/drizzle-kit/bin.cjs','migrate']);
 const args=['node_modules/wrangler/bin/wrangler.js','deploy','--keep-vars','--message',sha];
 if(existsSync('.dev.vars.production'))args.push('--secrets-file','.dev.vars.production');
-run(process.execPath,args);
+// This app uses dummy caches and dynamic private routes. No remote cache population is needed.
+// Use Wrangler directly to avoid starting a local workerd proxy on Windows.
+run(process.execPath,args,{env:{...process.env,OPEN_NEXT_DEPLOY:'true'}});
 console.log('Publicado o mesmo commit aprovado pelo CI: '+sha);
