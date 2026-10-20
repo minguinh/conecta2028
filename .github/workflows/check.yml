@@ -21,3 +21,9 @@ jobs:
       - run: pnpm test
       - run: pnpm build
       - run: pnpm exec opennextjs-cloudflare build --skipNextBuild
+      - uses: actions/upload-artifact@v4
+        with:
+          name: cloudflare-worker
+          path: .open-next/
+          include-hidden-files: true
+          retention-days: 3
