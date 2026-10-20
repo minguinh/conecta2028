@@ -1,0 +1,30 @@
+import assert from 'node:assert/strict';
+import {randomUUID} from 'node:crypto';
+import {hashPassword} from 'better-auth/crypto';
+import {neon} from '@neondatabase/serverless';
+process.loadEnvFile('.env.security');const db=neon(process.env.DATABASE_URL),base='http://127.0.0.1:3002',password='Contacts-test-only-2026-#1';
+assert.equal((await db`SELECT count(*)::int AS n FROM "user"`)[0].n,0,'Execute somente na branch de testes vazia.');
+async function call(path,method='GET',data,cookie){const r=await fetch(base+path,{method,headers:{...(data?{'Content-Type':'application/json',Origin:base}:{}),...(cookie?{Cookie:cookie}:{})},body:data?JSON.stringify(data):undefined});return {status:r.status,body:await r.json(),headers:r.headers};}
+const people={};for(const role of ['administrador_geral','coordenador','assessor','analista']){const id=randomUUID(),email=`${role}@contacts.invalid`;await db`INSERT INTO "user"(id,name,email,role,active) VALUES (${id},${'Validação '+role},${email},${role},true)`;await db`INSERT INTO account(id,"userId","providerId","accountId",password) VALUES (${randomUUID()},${id},'credential',${id},${await hashPassword(password)})`;const r=await call('/api/auth/sign-in/email','POST',{email,password});assert.equal(r.status,200,JSON.stringify(r.body));people[role]={id,cookie:r.headers.getSetCookie().map(c=>c.split(';')[0]).join('; ')};}
+const admin=people.administrador_geral.cookie,advisor=people.assessor.cookie;
+const [locality]=await db`INSERT INTO communities(name,kind) VALUES ('Localidade de validação','bairro') RETURNING id`;
+const draft={name:'Pessoa de validação',phone:'(81) 99999-1234',communityId:locality.id,address:'Endereço fictício para teste',notes:'Observação administrativa de teste',legalBasis:'consentimento',purpose:'Teste técnico isolado',legalEvidence:'Formulário fictício de teste',allowWhatsapp:true,allowSms:false,allowCalls:false,communicationEvidence:'Autorização fictícia de teste'};
+assert.equal((await call('/api/contacts')).status,401);
+assert.equal((await call('/api/contacts','GET',undefined,people.analista.cookie)).status,403);
+assert.equal((await call('/api/contacts','POST',draft,people.analista.cookie)).status,403);
+assert.equal((await call('/api/contacts','POST',{...draft,legalEvidence:''},admin)).status,400);
+assert.equal((await call('/api/contacts','POST',{...draft,politicalPreference:'rejected'},admin)).status,400);
+assert.equal((await call('/api/contacts','POST',{...draft,communicationEvidence:''},admin)).status,400);
+const [a,b]=await Promise.all([call('/api/contacts','POST',draft,admin),call('/api/contacts','POST',{...draft,phone:'+55 81 99999-1234'},admin)]);assert.deepEqual([a.status,b.status].sort(),[201,409]);const id=(a.status===201?a:b).body.id;
+let state=(await call('/api/contacts','GET',undefined,admin)).body;assert.equal(state.total,1);assert.equal(state.contacts[0].phone,'5581999991234');assert.equal((await call('/api/contacts?q=nobody','GET',undefined,admin)).body.total,0);assert.equal((await call('/api/contacts?channel=whatsapp','GET',undefined,admin)).body.total,1);assert.equal((await call(`/api/contacts?locality=${locality.id}&basis=consentimento`,'GET',undefined,admin)).body.total,1);
+assert.equal((await call('/api/contacts','GET',undefined,advisor)).body.total,0);assert.equal((await call(`/api/contacts/${id}/history`,'GET',undefined,advisor)).body.length,0);
+const update={...draft,name:'Pessoa atualizada',allowWhatsapp:false,communicationEvidence:'Revogação fictícia em 20/10/2026',version:1};
+assert.equal((await call(`/api/contacts/${id}`,'PATCH',update,advisor)).status,409);
+assert.equal((await call(`/api/contacts/${id}`,'PATCH',update,people.coordenador.cookie)).status,200);
+assert.equal((await call(`/api/contacts/${id}`,'PATCH',update,admin)).status,409);
+state=(await call('/api/contacts?channel=none','GET',undefined,admin)).body;assert.equal(state.total,1);assert.equal(state.contacts[0].version,2);
+const owned=await call('/api/contacts','POST',{...draft,phone:'81988881234'},advisor);assert.equal(owned.status,201);assert.equal((await call('/api/contacts','GET',undefined,advisor)).body.total,1);
+const logs=(await call(`/api/contacts/${id}/history`,'GET',undefined,admin)).body;assert.equal(logs.length,2);assert.ok(logs[0].metadata.fields.includes('name'));assert.ok(logs[0].metadata.fields.includes('allow_whatsapp'));assert.equal(logs[0].metadata.communication.whatsapp,false);assert.ok(!JSON.stringify(logs).includes(draft.address));assert.ok(!JSON.stringify(logs).includes(draft.phone));
+let blocked=false;try{await db`UPDATE audit_logs SET action='tamper' WHERE metadata->>'recordId'=${id}`;}catch{blocked=true;}assert.ok(blocked);
+const page=await fetch(base+'/contatos',{headers:{Cookie:admin}});assert.equal(page.status,200);assert.ok((await page.text()).includes('Pessoa atualizada'));
+console.log('PASS: autenticação, escopo, base legal, campos proibidos, canais, duplicidade concorrente, filtros, edição, revogação, conflito de versão, histórico imutável sem cópia de dados pessoais e página SSR.');

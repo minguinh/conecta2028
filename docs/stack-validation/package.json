@@ -1,0 +1,31 @@
+{
+  "name": "conecta2028-stack-validation",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Manifesto isolado para conferir resolução de versões. Não é o aplicativo em produção.",
+  "engines": { "node": ">=22.0.0" },
+  "dependencies": {
+    "next": "16.4.2",
+    "react": "19.3.1",
+    "react-dom": "19.3.1",
+    "@opennextjs/cloudflare": "1.20.12",
+    "@neondatabase/serverless": "1.2.0",
+    "drizzle-orm": "0.45.4",
+    "better-auth": "1.7.12",
+    "@better-auth/drizzle-adapter": "1.7.12",
+    "maplibre-gl": "6.15.0",
+    "lucide-react": "1.60.0",
+    "@radix-ui/react-slot": "1.5.0",
+    "class-variance-authority": "0.7.1",
+    "clsx": "2.1.1",
+    "tailwind-merge": "3.7.0"
+  },
+  "devDependencies": {
+    "typescript": "5.9.3",
+    "tailwindcss": "4.3.3",
+    "@tailwindcss/postcss": "4.3.3",
+    "drizzle-kit": "0.31.11",
+    "wrangler": "4.151.3",
+    "shadcn": "4.22.1"
+  }
+}

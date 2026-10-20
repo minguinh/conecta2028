@@ -1,0 +1,6 @@
+'use client';
+import { useState } from 'react';
+import { createAuthClient } from 'better-auth/react';
+import { Button } from '@/components/ui/button';
+const auth=createAuthClient();
+export default function Login(){const [message,setMessage]=useState('');const [busy,setBusy]=useState(false);return <main className="login-page"><form onSubmit={async e=>{e.preventDefault();setBusy(true);setMessage('');const form=new FormData(e.currentTarget);try{const result=await auth.signIn.email({email:String(form.get('email')),password:String(form.get('password'))});if(result.error)setMessage('Não foi possível entrar. Confira as credenciais e a configuração do serviço.');else window.location.assign('/');}catch{setMessage('Serviço indisponível. Tente novamente.');}finally{setBusy(false);}}}><h1>Entrar no CONECTA 2028</h1><p>Acesse com a conta disponibilizada pela coordenação.</p><label>E-mail<input required type="email" name="email" autoComplete="username"/></label><label>Senha<input required type="password" name="password" autoComplete="current-password"/></label>{message&&<p role="alert">{message}</p>}<Button disabled={busy}>{busy?'Entrando…':'Entrar'}</Button><a href="/">Voltar ao painel</a>{process.env.NODE_ENV==='development'&&<a href="/configuracao-inicial">Configuração inicial do administrador</a>}</form></main>;}

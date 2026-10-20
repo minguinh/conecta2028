@@ -1,0 +1,15 @@
+import { neon } from '@neondatabase/serverless';
+import { PgDialect } from 'drizzle-orm/pg-core';
+import { dashboardQuery } from '../src/lib/dashboard-query';
+import assert from 'node:assert/strict';
+process.loadEnvFile('.env.local');
+if(!process.env.DATABASE_URL)throw new Error('DATABASE_URL ausente');
+const db=neon(process.env.DATABASE_URL);
+const extension=await db`SELECT name,default_version,installed_version FROM pg_available_extensions WHERE name='postgis'`;
+console.log('PostGIS:',JSON.stringify(extension));
+const compiled=new PgDialect().sqlToQuery(dashboardQuery);
+const [row]=await db.query(compiled.sql,compiled.params);
+const result=row.dashboard;
+assert.deepEqual(result.counts,{contacts:0,communities:0,scheduledVisits:0,openDemands:0});
+for(const key of ['communities','byLocality','agenda','byCategory','latest'])assert.deepEqual(result[key],[]);
+console.log('Verificado no Neon: quatro indicadores zerados e cinco conjuntos vazios. Nenhum dado foi inserido.');
