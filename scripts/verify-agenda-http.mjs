@@ -1,0 +1,37 @@
+import assert from 'node:assert/strict';
+import {randomUUID} from 'node:crypto';
+import {hashPassword} from 'better-auth/crypto';
+import {neon} from '@neondatabase/serverless';
+process.loadEnvFile('.env.security');const db=neon(process.env.DATABASE_URL),base='http://127.0.0.1:3002',password='Agenda-test-only-2026-#1';
+assert.equal((await db`SELECT count(*)::int AS n FROM "user"`)[0].n,0,'Use a branch agenda-check vazia.');
+async function call(path,method='GET',data,cookie){const r=await fetch(base+path,{method,headers:{...(data?{'Content-Type':'application/json',Origin:base}:{}),...(cookie?{Cookie:cookie}:{})},body:data?JSON.stringify(data):undefined});return {status:r.status,body:await r.json(),headers:r.headers};}
+const people={};for(const role of ['administrador_geral','coordenador','assessor','analista']){const id=randomUUID(),email=`${role}@agenda.invalid`;await db`INSERT INTO "user"(id,name,email,role,active) VALUES (${id},${'Validação '+role},${email},${role},true)`;await db`INSERT INTO account(id,"userId","providerId","accountId",password) VALUES (${randomUUID()},${id},'credential',${id},${await hashPassword(password)})`;const r=await call('/api/auth/sign-in/email','POST',{email,password});assert.equal(r.status,200,JSON.stringify(r.body));people[role]={id,cookie:r.headers.getSetCookie().map(c=>c.split(';')[0]).join('; ')};}
+const admin=people.administrador_geral.cookie,advisor=people.assessor.cookie;
+const [locality]=await db`INSERT INTO communities(name,kind) VALUES ('Localidade de validação','bairro') RETURNING id`;
+const draft={title:'Visita de validação',description:'Descrição administrativa fictícia',kind:'visita',scheduledAt:'2028-02-29T23:30',endsAt:'2028-03-01T00:30',assignedTo:people.assessor.id,communityId:locality.id};
+const range='?from=2028-02-01&to=2028-03-05';
+assert.equal((await call('/api/agenda'+range)).status,401);assert.equal((await call('/api/agenda'+range,'GET',undefined,people.analista.cookie)).status,403);assert.equal((await call('/api/agenda','POST',draft,people.analista.cookie)).status,403);
+assert.equal((await call('/api/agenda','POST',{...draft,scheduledAt:'2027-02-29T09:00'},admin)).status,400);
+assert.equal((await call('/api/agenda','POST',{...draft,assignedTo:people.analista.id},admin)).status,400);
+assert.equal((await call('/api/agenda','POST',{...draft,assignedTo:people.coordenador.id},advisor)).status,403);
+const created=await call('/api/agenda','POST',draft,admin);assert.equal(created.status,201,JSON.stringify(created.body));const id=created.body.id;
+let state=(await call('/api/agenda'+range,'GET',undefined,advisor)).body;assert.equal(state.events.length,1);assert.equal(state.responsibles.length,1);assert.equal(state.events[0].scheduledAt,'2028-03-01T02:30:00+00:00');
+assert.equal((await call('/api/agenda?from=2028-03-01&to=2028-03-02','GET',undefined,advisor)).body.events.length,1);
+assert.equal((await call('/api/agenda'+range+'&status=cancelada','GET',undefined,admin)).body.events.length,0);
+assert.equal((await call('/api/agenda'+range+'&assigned='+people.coordenador.id,'GET',undefined,advisor)).body.events.length,0);
+assert.equal((await call(`/api/agenda/${id}`,'PATCH',{...draft,version:1,title:'Visita atualizada'},advisor)).status,200);
+assert.equal((await call(`/api/agenda/${id}`,'PATCH',{...draft,version:1},admin)).status,409);
+assert.equal((await call(`/api/agenda/${id}/status`,'PATCH',{status:'concluida',version:2},advisor)).status,400);
+assert.equal((await call(`/api/agenda/${id}/status`,'PATCH',{status:'concluida',version:2,performedAt:'2028-01-01T10:00',visitReport:'Relato de teste'},advisor)).status,400);
+const performedAt='2026-10-01T10:00';const completed=await Promise.all([1,2].map(()=>call(`/api/agenda/${id}/status`,'PATCH',{status:'concluida',version:2,performedAt,visitReport:'Relato administrativo de validação'},advisor)));assert.deepEqual(completed.map(x=>x.status).sort(),[200,409]);
+assert.equal((await db`SELECT count(*)::int AS n FROM activities WHERE assigned_to=${people.assessor.id}`)[0].n,1);
+const general=await call('/api/agenda','POST',{...draft,kind:'compromisso',title:'Reunião de teste',assignedTo:people.coordenador.id},admin);assert.equal(general.status,201);
+assert.equal((await call('/api/agenda'+range,'GET',undefined,advisor)).body.events.length,1);
+assert.equal((await call(`/api/agenda/${general.body.id}/status`,'PATCH',{status:'cancelada',version:1},advisor)).status,409);
+assert.equal((await call(`/api/agenda/${general.body.id}/status`,'PATCH',{status:'cancelada',version:1},people.coordenador.cookie)).status,200);
+const next=await call('/api/agenda','POST',{...draft,title:'Próxima visita de teste',scheduledAt:'2028-03-02T09:00',endsAt:'2028-03-02T10:00'},admin);assert.equal(next.status,201);
+const dashboard=(await call('/api/dashboard','GET',undefined,advisor)).body;assert.equal(dashboard.status,'ready');assert.equal(dashboard.data.upcoming.length,1);assert.equal(dashboard.data.upcoming[0].id,next.body.id);assert.equal(dashboard.data.counts.scheduledVisits,1);
+const aggregate=(await call('/api/dashboard','GET',undefined,people.analista.cookie)).body;assert.equal(aggregate.data.upcoming.length,0);
+const audit=await db`SELECT metadata FROM audit_logs WHERE action='visits.update' AND metadata->>'recordId'=${id}`;assert.ok(audit.some(x=>x.metadata.status==='concluida'));assert.ok(!JSON.stringify(audit).includes('Relato administrativo de validação'));
+const page=await fetch(base+'/agenda',{headers:{Cookie:admin}});assert.equal(page.status,200);assert.ok((await page.text()).includes('Horário de Fortaleza'));
+console.log('PASS: criação, responsáveis e localidades, fuso/virada de dia, filtros, edição concorrente, conclusão de visita, prevenção de duplicação de atividades, cancelamento, escopo por perfil, auditoria e dashboard.');

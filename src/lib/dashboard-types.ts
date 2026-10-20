@@ -3,6 +3,7 @@ export type DashboardData = {
   communities: {id:string; name:string; latitude:number|null; longitude:number|null}[];
   byLocality: {name:string; count:number}[];
   agenda: {id:string; title:string; community:string|null; scheduledAt:string}[];
+  upcoming: {id:string; title:string; community:string|null; responsible:string|null; scheduledAt:string; kind:string}[];
   byCategory: {name:string; count:number}[];
   latest: {id:string; title:string; community:string|null; occurredAt:string}[];
 };

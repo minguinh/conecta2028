@@ -15,11 +15,12 @@ SELECT json_build_object(
  'counts',json_build_object(
   'contacts',(SELECT count(*)::int FROM allowed_contacts),
   'communities',(SELECT count(*)::int FROM allowed_communities),
-  'scheduledVisits',(SELECT count(*)::int FROM allowed_visits WHERE status='agendada' AND scheduled_at>=now()),
+  'scheduledVisits',(SELECT count(*)::int FROM allowed_visits WHERE kind='visita' AND status='agendada' AND scheduled_at>=now()),
   'openDemands',(SELECT count(*)::int FROM allowed_demands WHERE status='em_andamento')),
  'communities',coalesce((SELECT json_agg(r) FROM (SELECT id,name,latitude,longitude FROM allowed_communities ORDER BY name)r),'[]'::json),
  'byLocality',coalesce((SELECT json_agg(r) FROM (SELECT coalesce(c.name,'Sem localidade') AS name,count(a.id)::int AS count FROM allowed_activities a LEFT JOIN allowed_communities c ON c.id=a.community_id GROUP BY c.id,c.name ORDER BY count(a.id) DESC,coalesce(c.name,'Sem localidade'))r),'[]'::json),
  'agenda',coalesce((SELECT json_agg(r) FROM (SELECT v.id,v.title,c.name AS community,v.scheduled_at AS "scheduledAt" FROM allowed_visits v LEFT JOIN allowed_communities c ON c.id=v.community_id CROSS JOIN day_bounds b WHERE v.status='agendada' AND v.scheduled_at>=b.start_at AND v.scheduled_at<b.end_at ORDER BY v.scheduled_at,v.id)r),'[]'::json),
+ 'upcoming',coalesce((SELECT json_agg(r) FROM (SELECT v.id,v.title,c.name AS community,u.name AS responsible,v.scheduled_at AS "scheduledAt",v.kind FROM allowed_visits v LEFT JOIN allowed_communities c ON c.id=v.community_id LEFT JOIN "user" u ON u.id=v.assigned_to WHERE v.status='agendada' AND v.scheduled_at>=now() ORDER BY v.scheduled_at,v.id LIMIT 5)r),'[]'::json),
  'byCategory',coalesce((SELECT json_agg(r) FROM (SELECT category AS name,count(*)::int AS count FROM allowed_demands GROUP BY category ORDER BY count(*) DESC,category)r),'[]'::json),
  'latest',coalesce((SELECT json_agg(r) FROM (SELECT a.id,a.title,c.name AS community,a.occurred_at AS "occurredAt" FROM allowed_activities a LEFT JOIN allowed_communities c ON c.id=a.community_id ORDER BY a.occurred_at DESC,a.id DESC LIMIT 10)r),'[]'::json)
 ) AS dashboard`;
