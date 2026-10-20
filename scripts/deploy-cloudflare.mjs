@@ -29,7 +29,7 @@ if(!artifact)throw Error('Artefato Cloudflare não encontrado.');
 const archive=Buffer.from(await (await get(`${base}/actions/artifacts/${artifact.id}/zip`)).arrayBuffer());
 mkdirSync('.cloudflare-artifacts',{recursive:true});
 writeFileSync('.cloudflare-artifacts/worker.zip',archive);
-if(process.platform==='win32')run('powershell',['-NoProfile','-Command',`$target = Join-Path (Get-Location).Path '.open-next'; if ([IO.Path]::GetFullPath($target) -ne '${root.replace(/'/g,"''")}\\.open-next') { throw 'Destino inválido' }; if (Test-Path -LiteralPath $target) { Remove-Item -LiteralPath $target -Recurse -Force }; Expand-Archive -LiteralPath '.cloudflare-artifacts/worker.zip' -DestinationPath $target -Force`]);
+if(process.platform==='win32')run('powershell',['-NoProfile','-Command',`$target = Join-Path (Get-Location).Path '.open-next'; if ([IO.Path]::GetFullPath($target) -ne '${root.replace(/'/g,"''")}\\.open-next') { throw 'Destino inválido' }; if (Test-Path -LiteralPath $target) { Remove-Item -LiteralPath $target -Recurse -Force }; Add-Type -AssemblyName System.IO.Compression.FileSystem; [IO.Compression.ZipFile]::ExtractToDirectory((Join-Path (Get-Location).Path '.cloudflare-artifacts/worker.zip'),$target)`]);
 else {run('mkdir',['-p','.open-next']);run('unzip',['-oq','.cloudflare-artifacts/worker.zip','-d','.open-next']);}
 if(existsSync('.env.production.local'))run(process.execPath,['--env-file=.env.production.local','node_modules/drizzle-kit/bin.cjs','migrate']);
 const args=['node_modules/wrangler/bin/wrangler.js','deploy','--keep-vars','--message',sha];
