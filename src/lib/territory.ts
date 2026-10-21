@@ -4,11 +4,11 @@ import { sql } from 'drizzle-orm';
 import { getDb } from '@/db/client';
 import { transaction,type Transaction } from '@/db/write';
 import { type Actor } from './authorization';
-import { HttpError,string } from './http';
+import { HttpError,string,readJsonBody } from './http';
 import { coordinatePair,parseGeometry,parseBoundaries } from './geo-validation';
 import { localityKinds,type TerritoryData } from './territory-types';
 export const ibgeUrl='https://servicodados.ibge.gov.br/api/v3/malhas/municipios/2616506?formato=application/vnd.geo+json&qualidade=maxima';
-export async function readTerritoryBody(request:Pick<Request,'headers'|'body'>){if(Number(request.headers.get('content-length'))>2_000_000)throw new HttpError(413,'Limite de arquivo: 2 MB.');const reader=request.body?.getReader();if(!reader)throw new HttpError(400,'Envie os dados.');const chunks:Uint8Array[]=[];let size=0;while(true){const {value,done}=await reader.read();if(done)break;size+=value.length;if(size>2_000_000){await reader.cancel();throw new HttpError(413,'Limite de arquivo: 2 MB.');}chunks.push(value);}try{const bytes=new Uint8Array(size);let at=0;for(const c of chunks){bytes.set(c,at);at+=c.length;}const parsed=JSON.parse(new TextDecoder().decode(bytes));if(!parsed||typeof parsed!=='object'||Array.isArray(parsed))throw 0;return parsed as Record<string,unknown>;}catch{throw new HttpError(400,'JSON inválido.');}}
+export const readTerritoryBody=(request:Pick<Request,'headers'|'body'>)=>readJsonBody(request,2_000_000);
 async function authorizeWrite(tx:Transaction,actor:Actor){const row=await tx.execute(sql`SELECT id FROM "user" WHERE id=${actor.id} AND active=true AND role IN ('administrador_geral','coordenador') FOR SHARE`);if(!row.rows.length)throw new HttpError(403,'Somente administradores e coordenadores gerenciam o território.');}
 function kind(value:unknown){if(typeof value!=='string'||!Object.hasOwn(localityKinds,value))throw new HttpError(400,'Tipo de localidade inválido.');return value;}
 const geometrySql=(g:unknown)=>g?sql`ST_Force2D(ST_SetSRID(ST_GeomFromGeoJSON(${JSON.stringify(g)}),4326))`:sql`NULL`;

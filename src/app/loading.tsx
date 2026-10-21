@@ -1,0 +1,1 @@
+export default function Loading(){return <main id="conteudo" tabIndex={-1} className="login-page" aria-busy="true"><section role="status" aria-live="polite"><h1>Carregando CONECTA 2028…</h1><p>Aguarde enquanto consultamos os dados.</p></section></main>;}
