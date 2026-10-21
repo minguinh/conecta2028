@@ -10,6 +10,7 @@ const db=neon(process.env.DATABASE_URL),base='http://127.0.0.1:3002';
 assert.equal((await db`SELECT count(*)::int n FROM "user"`)[0].n,0);
 const id=randomUUID(),cases=[
  ['/api/dashboard','GET','dashboard.read'],['/api/territory','GET','territory.read'],
+ ['/api/demands','GET','operations.read'],['/api/demands','POST','operations.write'],[`/api/demands/${id}`,'PATCH','operations.write'],[`/api/demands/${id}/history`,'GET','operations.read'],
  ['/api/territory','POST','territory.manage'],[`/api/territory/${id}`,'PATCH','territory.manage'],['/api/territory/import','POST','territory.manage'],
  ['/api/contacts','GET','operations.read'],['/api/contacts','POST','operations.write'],[`/api/contacts/${id}`,'PATCH','operations.write'],[`/api/contacts/${id}/history`,'GET','operations.read'],
  ['/api/agenda?from=2028-01-01&to=2028-01-31','GET','operations.read'],['/api/agenda','POST','operations.write'],[`/api/agenda/${id}`,'PATCH','operations.write'],[`/api/agenda/${id}/status`,'PATCH','operations.write'],

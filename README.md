@@ -1,6 +1,6 @@
 # CONECTA 2028
 
-Gestão comunitária de Xexéu com território, contatos com base legal, agenda, equipe e auditoria. Indicadores consultam o Neon e mostram estados vazios quando não há registros.
+Gestão comunitária de Xexéu com território, contatos com base legal, agenda, demandas, equipe e auditoria. Indicadores consultam o Neon e mostram estados vazios quando não há registros.
 
 Produção: https://conecta2028.domingosfonseca.workers.dev/
 Repositório: https://github.com/minguinh/conecta2028
@@ -58,5 +58,7 @@ Arquivos .env*, .dev.vars*, dependências e artefatos são ignorados, exceto exe
 - [Território](docs/CADASTRO-TERRITORIAL.md)
 - [Contatos](docs/CADASTRO-CONTATOS.md)
 - [Agenda](docs/AGENDA.md)
+- [Demandas e abertura dos cadastros](docs/DEMANDAS.md)
+- [Saúde: arquitetura independente em preparação](modules/health/README.md)
 
-Demandas, relatórios completos e comunicação têm áreas em preparação. Perfil de saúde reservado e desabilitado. Não registrar preferências políticas individuais nem usar saúde para fins eleitorais. Logomarca original preservada em public/branding/logo-minguinho.png; menu usa sua versão transparente.
+Relatórios completos e comunicação têm áreas em preparação. Perfil de saúde reservado e desabilitado. Não registrar preferências políticas individuais nem usar saúde para fins eleitorais. Logomarca original preservada em public/branding/logo-minguinho.png; menu usa sua versão transparente.

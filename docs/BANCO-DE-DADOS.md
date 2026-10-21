@@ -35,6 +35,9 @@ O backfill preserva exatamente os dados já documentados e usa a origem `migraca
 - `0012_integrity_and_authorizations.sql`: backfill, triggers, históricos imutáveis e checks adicionais.
 - `0013_clammy_pixie.sql`: índices de identidade, sessões, verificação e unicidade territorial.
 - `0014_spooky_shockwave.sql`: índices das FKs de perfil e localidades de agenda/demandas.
+- `0015_blue_war_machine.sql`: acompanhamento de demandas, prazos, prioridade administrativa, encerramento, versão e auditoria/atividades atômicas.
+
+Saúde tem schema, banco e migrations independentes em `modules/health`, fora deste fluxo. O deploy principal não aplica migrations de saúde.
 
 As migrations anteriores preservam o histórico dos cadastros, autenticação, PostGIS, contatos e agenda. Não foram reescritas migrations já publicadas.
 

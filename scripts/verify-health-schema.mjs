@@ -1,0 +1,21 @@
+import assert from 'node:assert/strict';import {neon} from '@neondatabase/serverless';import {randomUUID} from 'node:crypto';
+process.loadEnvFile('.env.health-security');assert.equal(process.env.HEALTH_SECURITY_TEST,'true','Use only the isolated health_test database.');const db=neon(process.env.HEALTH_DATABASE_URL_UNPOOLED);
+assert.equal((await db`SELECT current_database() AS name`)[0].name,'health_test');
+assert.equal((await db`SELECT count(*)::int n FROM health.requests`)[0].n,0,'Use an empty test database.');
+assert.equal((await db`SELECT count(*)::int n FROM information_schema.tables WHERE table_schema='health'`)[0].n,7);
+assert.equal((await db`SELECT count(*)::int n FROM information_schema.tables WHERE table_schema='public' AND table_name IN ('contacts','demands','user')`)[0].n,0);
+assert.equal((await db`SELECT count(*)::int n FROM pg_constraint c JOIN pg_class a ON a.oid=c.conrelid JOIN pg_namespace an ON an.oid=a.relnamespace JOIN pg_class b ON b.oid=c.confrelid JOIN pg_namespace bn ON bn.oid=b.relnamespace WHERE c.contype='f' AND an.nspname='health' AND bn.nspname<>'health'`)[0].n,0);
+const actor='isolated-health-test',id=randomUUID();await db`INSERT INTO health.memberships(subject_id,role,active) VALUES (${actor},'atendente_saude',true)`;
+await assert.rejects(db`INSERT INTO health.requests(id,protocol,kind,person_name,assigned_to,policy_version,expires_at) VALUES (${id},${'TEST-'+id},'exame','Pessoa fictícia',${actor},'test-only','2030-01-01')`,e=>e.code==='P0001');
+async function tx(query){return db.transaction([db`SELECT set_config('health.actor_id',${actor},true)`,db`SELECT set_config('health.audit_retention_days','30',true)`,query]);}
+await tx(db`INSERT INTO health.requests(id,protocol,kind,person_name,assigned_to,policy_version,expires_at) VALUES (${id},${'TEST-'+id},'exame','Pessoa fictícia',${actor},'test-only','2030-01-01')`);
+assert.equal((await db`SELECT count(*)::int n FROM health.status_events WHERE request_id=${id}`)[0].n,1);
+await assert.rejects(tx(db`UPDATE health.requests SET restricted=false,version=version+1 WHERE id=${id}`),e=>e.code==='P0001');
+await tx(db`INSERT INTO health.legal_records(request_id,kind,purpose,reference,notice_version,consented,recorded_by) VALUES (${id},'consentimento','Teste isolado','Evidência fictícia','test-only',true,${actor})`);
+await tx(db`UPDATE health.requests SET restricted=false,version=version+1 WHERE id=${id}`);
+await tx(db`UPDATE health.legal_records SET revoked_at=now() WHERE request_id=${id}`);
+assert.equal((await db`SELECT restricted FROM health.requests WHERE id=${id}`)[0].restricted,true);
+await assert.rejects(db`UPDATE health.access_logs SET outcome='denied'`,e=>e.code==='P0001');
+await assert.rejects(db`DELETE FROM health.access_logs`,e=>e.code==='P0001');
+assert.ok((await db`SELECT count(*)::int n FROM health.access_logs WHERE request_id=${id}`)[0].n>=5);
+console.log('PASS health: independent database, internal FKs only, required audit context, protocol history, consent release/revocation, immutable audit. Test fixtures only.');

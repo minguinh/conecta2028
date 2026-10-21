@@ -41,3 +41,7 @@ Mutações validam origem e JSON. O leitor interrompe o stream acima do limite d
 Identidade visual e logo original preservadas. Estados vazios representam ausência real de registros. Limites de erro compartilham recuperação com retry() do Next instalado; global-error cobre falhas do layout. Há link para pular navegação, conteúdo focável, controles nativos, estados anunciados, foco visível e movimento reduzido. Listagem e entrada de coordenadas são alternativas ao mapa.
 
 CI verifica tipos, testes, build, fronteira cliente/servidor e bundle antes do artefato Linux. O deploy publica o commit aprovado e aplica migrations controladas. Não há envio automático de e-mails, recuperação de senha por e-mail nem monitoramento externo configurados.
+
+## Saúde independente (preparação)
+
+`modules/health` contém schema e migrations separados, regras de acesso próprio, base legal, protocolos administrativos, documentos privados em quarentena, auditoria e contratos de retenção/exclusão. Não é importado pelo banco ou backend principal. `/saude` é apenas uma tela de preparação para o administrador, sem acesso a pacientes ou documentos. Banco, Worker, identidade, bucket e política de saúde precisam de configuração própria antes da ativação. Não existe integração com regulação oficial ou dados eleitorais. Veja `modules/health/README.md`.

@@ -14,6 +14,8 @@ Configure `.env.security` privado com DATABASE_URL, DATABASE_URL_UNPOOLED e SECU
 
 Os scripts verify-agenda-http, verify-contacts-http, verify-territory-http, verify-users-http, verify-auth-sessions e verify-integrity têm pré-condições próprias; use bancos novos e respeite seus asserts. Testes de upgrade exigem versão inicial específica. Ao terminar, encerre servidor, exclua branch e remova .env.security. Não rode servidores Next simultâneos escrevendo arquivos gerados.
 
+O teste integrado `node scripts/verify-registrations-http.mjs` exige as mesmas variáveis e banco vazio. Valida criação e edição de todos os tipos de localidade, contatos, conta/ativação, agenda, demandas, concorrência, encerramento, auditoria e atualização do dashboard. Mantém fixtures para revisão da interface no banco temporário; remova a branch ao terminar. Não o execute após outros conjuntos no mesmo banco.
+
 ## Acessibilidade
 
 Revisar teclado: Tab até “Pular para o conteúdo”, foco no conteúdo, navegação, menu mobile, formulários, filtros, paginação e recuperação de erros. Conferir leitor de tela, zoom 200%, largura 360 px, mensagens assíncronas e movimento reduzido. Listagem e coordenadas oferecem alternativa ao mapa. Validar contraste ao mudar cores; preservar rótulos e foco visível.
