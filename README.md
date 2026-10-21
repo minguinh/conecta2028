@@ -59,6 +59,7 @@ Arquivos .env*, .dev.vars*, dependências e artefatos são ignorados, exceto exe
 - [Contatos](docs/CADASTRO-CONTATOS.md)
 - [Agenda](docs/AGENDA.md)
 - [Demandas e abertura dos cadastros](docs/DEMANDAS.md)
+- [Resultados eleitorais agregados e importação TSE](docs/RESULTADOS-ELEITORAIS.md)
 - [Saúde: arquitetura independente em preparação](modules/health/README.md)
 
 Relatórios completos e comunicação têm áreas em preparação. Perfil de saúde reservado e desabilitado. Não registrar preferências políticas individuais nem usar saúde para fins eleitorais. Logomarca original preservada em public/branding/logo-minguinho.png; menu usa sua versão transparente.

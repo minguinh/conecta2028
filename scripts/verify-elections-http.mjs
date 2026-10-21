@@ -1,0 +1,46 @@
+import assert from 'node:assert/strict';
+import {randomUUID} from 'node:crypto';
+import {hashPassword} from 'better-auth/crypto';
+import {neon} from '@neondatabase/serverless';
+process.loadEnvFile('.env.security');assert.equal(process.env.SECURITY_TEST_BRANCH,'true');
+const db=neon(process.env.DATABASE_URL),base='http://127.0.0.1:3002',password='Eleitoral-test-only-2026-#1';
+assert.equal((await db`select current_database() name`)[0].name,'electoral_test');
+assert.equal((await db`select count(*)::int n from "user" where email not in ('admin@elections.invalid','coordinator@elections.invalid','advisor@elections.invalid','analyst@elections.invalid')`)[0].n,0,'Use an isolated test database.');
+assert.equal((await db`select count(*)::int n from election_results`)[0].n,0);
+await db`delete from "rateLimit"`;
+const previousAudit=(await db`select count(*)::int n from audit_logs where action='elections.import'`)[0].n;
+let checks=0;
+async function call(method,data,cookie,query=''){const r=await fetch(base+'/api/elections'+query,{method,headers:{...(data?{origin:base,'content-type':'application/json'}:{}),...(cookie?{cookie}:{})},body:data?JSON.stringify(data):undefined});checks++;return {status:r.status,body:await r.json()};}
+const actors={};for(const [role,prefix] of [['administrador_geral','admin'],['coordenador','coordinator'],['assessor','advisor'],['analista','analyst']]){const email=prefix+'@elections.invalid';const existing=await db`select id from "user" where email=${email}`;const id=existing[0]?.id||randomUUID();if(!existing.length){await db`insert into "user"(id,name,email,role,active) values(${id},${'Teste '+prefix},${email},${role},true)`;await db`insert into account(id,"userId","providerId","accountId",password) values(${randomUUID()},${id},'credential',${id},${await hashPassword(password)})`;}const login=await fetch(base+'/api/auth/sign-in/email',{method:'POST',headers:{origin:base,'content-type':'application/json'},body:JSON.stringify({email,password})});assert.equal(login.status,200);actors[role]={id,cookie:login.headers.getSetCookie().map(c=>c.split(';')[0]).join('; ')};}
+const admin=actors.administrador_geral.cookie;
+assert.equal((await call('GET')).status,401);assert.equal((await call('POST',{kind:'results'})).status,401);
+const header='ANO_ELEICAO;CD_ELEICAO;NR_TURNO;SG_UF;CD_MUNICIPIO;NM_MUNICIPIO;NR_ZONA;NR_SECAO;CD_CARGO;DS_CARGO;NR_VOTAVEL;NM_VOTAVEL;QT_VOTOS;NR_LOCAL_VOTACAO;NM_LOCAL_VOTACAO';
+const row=(year,election,section,option,votes,place=1000)=>`${year};${election};1;PE;99999;MUNICIPIO TESTE;1;${section};11;Prefeito;${option};OPCAO ${option};${votes};${place};ESCOLA TESTE`;
+const payload={kind:'results',sourceUrl:'https://dadosabertos.tse.jus.br/dataset/resultados-2024',csv:header+'\n'+[row(2024,619,1,10,40),row(2024,619,1,20,60),row(2024,619,2,10,50)].join('\n')};
+for(const role of ['coordenador','assessor','analista'])assert.equal((await call('POST',payload,actors[role].cookie)).status,403);
+assert.equal((await call('GET',undefined,actors.assessor.cookie)).status,403);
+for(const role of ['administrador_geral','coordenador','analista']){const r=await call('GET',undefined,actors[role].cookie);assert.equal(r.status,200);assert.equal(r.body.selected,null);}
+let r=await call('POST',payload,admin);assert.equal(r.status,201,JSON.stringify(r.body));assert.equal(r.body.count,3);
+r=await call('POST',payload,admin);assert.equal(r.body.duplicate,true);
+r=await call('GET',undefined,admin);assert.equal(r.body.places[0].votes,150);assert.equal(r.body.places[0].sections,2);assert.equal(r.body.places[0].latitude,null);assert.equal(r.body.imports.length,1);
+assert.equal((await call('POST',{...payload,csv:header+'\n'+row(2024,619,1,10,45)},admin)).status,201);
+assert.equal((await call('GET',undefined,admin)).body.places[0].votes,155);
+assert.equal((await call('POST',{...payload,csv:header+'\n'+row(2020,426,1,10,30)},admin)).status,201);
+r=await call('GET',undefined,actors.analista.cookie);assert.equal(r.body.history.length,2);assert.equal(r.body.history[0].year,2020);assert.equal(r.body.history[1].votes,155);
+const point={type:'Feature',properties:{year:2024,uf:'PE',municipality:'99999',zone:1,place:'1000'},geometry:{type:'Point',coordinates:[-35.65,-8.83]}};
+assert.equal((await call('POST',{kind:'places',sourceUrl:payload.sourceUrl,geojson:{type:'FeatureCollection',features:[point]}},admin)).status,201);
+assert.equal((await call('GET',undefined,admin)).body.places[0].latitude,-8.83);
+const before=(await db`select count(*)::int n from election_imports`)[0].n;
+assert.equal((await call('POST',{...payload,csv:header+'\n'+row(2024,619,1,10,99,2000)},admin)).status,409);
+assert.equal((await db`select count(*)::int n from election_imports`)[0].n,before,'Failed imports roll back the batch too.');
+assert.equal((await call('POST',{...payload,csv:header+';CPF\n'+row(2024,619,1,10,99)+';123'},admin)).status,400);
+assert.equal((await call('POST',{...payload,sourceUrl:'https://evil.test'},admin)).status,400);
+const otherPoint={...point,properties:{...point.properties,place:'9999'}};
+assert.equal((await call('POST',{kind:'places',sourceUrl:payload.sourceUrl,geojson:{type:'FeatureCollection',features:[otherPoint]}},admin)).status,400);
+assert.equal((await call('GET',undefined,admin,'?selection='+encodeURIComponent('2020:426:1:11:PE:99999'))).body.places[0].votes,30);
+assert.equal((await db`select count(*)::int n from audit_logs where action='elections.import'`)[0].n,previousAudit+4);
+assert.equal((await db`select count(*)::int n from contacts`)[0].n,0);
+assert.equal((await db`select count(*)::int n from information_schema.tables where table_schema='health'`)[0].n,0);
+await db`update "user" set active=false where id=${actors.administrador_geral.id}`;
+assert.ok([401,403].includes((await call('POST',payload,admin)).status));await db`update "user" set active=true where id=${actors.administrador_geral.id}`;
+console.log(`Election integration passed: ${checks} HTTP checks; aggregate fixtures remain only in the isolated test database.`);

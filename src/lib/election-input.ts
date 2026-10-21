@@ -1,0 +1,32 @@
+import {HttpError} from './http';
+export type ElectionRow={year:number;election:string;turn:number;uf:string;municipality:string;municipalityName:string;zone:number;section:number;office:string;officeName:string;option:string;optionName:string;votes:number;place:string;placeName:string};
+export const tseColumns=['DT_GERACAO','HH_GERACAO','ANO_ELEICAO','CD_TIPO_ELEICAO','NM_TIPO_ELEICAO','NR_TURNO','CD_ELEICAO','DS_ELEICAO','DT_ELEICAO','TP_ABRANGENCIA','SG_UF','SG_UE','NM_UE','CD_MUNICIPIO','NM_MUNICIPIO','NR_ZONA','NR_SECAO','CD_CARGO','DS_CARGO','NR_VOTAVEL','NM_VOTAVEL','QT_VOTOS','NR_LOCAL_VOTACAO','SQ_CANDIDATO','NM_LOCAL_VOTACAO','DS_LOCAL_VOTACAO_ENDERECO'] as const;
+const required=['ANO_ELEICAO','CD_ELEICAO','NR_TURNO','SG_UF','CD_MUNICIPIO','NM_MUNICIPIO','NR_ZONA','NR_SECAO','CD_CARGO','DS_CARGO','NR_VOTAVEL','NM_VOTAVEL','QT_VOTOS','NR_LOCAL_VOTACAO','NM_LOCAL_VOTACAO'];
+/** Strict semicolon CSV: quoted separators/newlines and doubled quotes, no silent truncation. */
+export function parseCsv(text:string):string[][]{
+ if(text.length>1_500_000||text.includes('\0'))throw new HttpError(400,'CSV inválido ou maior que 1,5 MB.');
+ const rows:string[][]=[];let row:string[]=[],cell='',quoted=false,closed=false;
+ for(let i=0;i<text.length;i++){const c=text[i];if(quoted){if(c==='"'){if(text[i+1]==='"'){cell+='"';i++;}else{quoted=false;closed=true;}}else cell+=c;continue;}
+ if(c==='"'){if(cell||closed)throw new HttpError(400,'Aspas inválidas no CSV.');quoted=true;}
+ else if(c===';'||c==='\n'||c==='\r'){row.push(cell);cell='';closed=false;if(c!==';'){if(c==='\r'&&text[i+1]==='\n')i++;if(row.some(Boolean))rows.push(row);row=[];if(rows.length>2001)throw new HttpError(400,'Envie no máximo 2.000 linhas por lote.');}}
+ else{if(closed)throw new HttpError(400,'Conteúdo após aspas no CSV.');cell+=c;}}
+ if(quoted)throw new HttpError(400,'Aspas não fechadas no CSV.');if(cell||row.length){row.push(cell);if(row.some(Boolean))rows.push(row);}if(rows.length>2001)throw new HttpError(400,'Envie no máximo 2.000 linhas por lote.');return rows;
+}
+export function officialSource(value:unknown){if(typeof value!=='string'||value.length>500)throw new HttpError(400,'Informe a URL oficial de origem.');let url:URL;try{url=new URL(value);}catch{throw new HttpError(400,'URL oficial inválida.');}if(url.protocol!=='https:'||url.username||url.password||!(url.hostname==='tse.jus.br'||url.hostname.endsWith('.tse.jus.br')))throw new HttpError(400,'Use uma URL HTTPS oficial do TSE.');return url.href;}
+export function parseElectionCsv(text:string):ElectionRow[]{
+ const [head,...lines]=parseCsv(text.replace(/^\uFEFF/,''));if(!head||!lines.length)throw new HttpError(400,'O CSV não contém resultados.');
+ if(new Set(head).size!==head.length||head.some(h=>!tseColumns.includes(h as typeof tseColumns[number]))||required.some(h=>!head.includes(h)))throw new HttpError(400,'Cabeçalho incompatível. Use votação por seção do TSE, sem colunas pessoais ou adicionais.');
+ const seen=new Set<string>();return lines.map((cells,index)=>{if(cells.length!==head.length)throw new HttpError(400,`Linha ${index+2}: quantidade de colunas inválida.`);const r=Object.fromEntries(head.map((h,i)=>[h,cells[i].trim()]));
+ const n=(key:string,min:number,max:number)=>{const v=r[key];if(!/^\d+$/.test(v)||!Number.isSafeInteger(Number(v))||Number(v)<min||Number(v)>max)throw new HttpError(400,`Linha ${index+2}: ${key} inválido.`);return Number(v);};
+ const s=(key:string,max=200)=>{if(!r[key]||r[key].length>max||/[\u0000-\u001f\u007f\ufffd]/.test(r[key]))throw new HttpError(400,`Linha ${index+2}: ${key} inválido.`);return r[key];};
+ const row:ElectionRow={year:n('ANO_ELEICAO',1994,2100),election:String(n('CD_ELEICAO',1,999999)),turn:n('NR_TURNO',1,2),uf:s('SG_UF',2),municipality:String(n('CD_MUNICIPIO',1,9999999)),municipalityName:s('NM_MUNICIPIO'),zone:n('NR_ZONA',1,9999),section:n('NR_SECAO',1,99999),office:String(n('CD_CARGO',1,999)),officeName:s('DS_CARGO',80),option:String(n('NR_VOTAVEL',0,999999999)),optionName:s('NM_VOTAVEL'),votes:n('QT_VOTOS',0,1000000),place:String(n('NR_LOCAL_VOTACAO',1,99999999)),placeName:s('NM_LOCAL_VOTACAO')};
+ if(!/^[A-Z]{2}$/.test(row.uf))throw new HttpError(400,'UF inválida.');const key=[row.year,row.election,row.turn,row.uf,row.municipality,row.zone,row.section,row.office,row.option].join(':');if(seen.has(key))throw new HttpError(400,'O lote contém resultados duplicados para a mesma seção e opção.');seen.add(key);return row;});
+}
+export type ElectionPoint={year:number;uf:string;municipality:string;zone:number;place:string;latitude:number;longitude:number};
+/** Normalized GeoJSON adapter; only polling-place identifiers, never citizen coordinates. */
+export function parseElectionPoints(value:unknown):ElectionPoint[]{
+ const obj=value as {type?:unknown;features?:unknown[]};if(!obj||obj.type!=='FeatureCollection'||!Array.isArray(obj.features)||!obj.features.length||obj.features.length>500)throw new HttpError(400,'Envie GeoJSON com 1 a 500 locais de votação.');
+ const seen=new Set<string>();return obj.features.map(item=>{if(!item||typeof item!=='object')throw new HttpError(400,'Ponto GeoJSON inválido.');const f=item as {type?:unknown;properties?:Record<string,unknown>;geometry?:{type?:unknown;coordinates?:unknown[]}};const p=f.properties,g=f.geometry;if(f.type!=='Feature'||!p||Object.keys(p).sort().join(',')!=='municipality,place,uf,year,zone'||g?.type!=='Point'||!Array.isArray(g.coordinates)||g.coordinates.length!==2)throw new HttpError(400,'GeoJSON incompatível com o modelo de locais de votação.');
+ const [longitude,latitude]=g.coordinates;if(typeof longitude!=='number'||typeof latitude!=='number'||!Number.isFinite(longitude)||!Number.isFinite(latitude)||latitude< -90||latitude>90||longitude< -180||longitude>180||!Number.isInteger(p.year)||Number(p.year)<1994||Number(p.year)>2100||!Number.isInteger(p.zone)||Number(p.zone)<1||Number(p.zone)>9999||typeof p.uf!=='string'||!(/^[A-Z]{2}$/).test(p.uf)||typeof p.municipality!=='string'||!(/^[1-9]\d{0,6}$/).test(p.municipality)||typeof p.place!=='string'||!(/^[1-9]\d{0,7}$/).test(p.place))throw new HttpError(400,'Identificadores ou coordenadas inválidos.');
+ const point={year:Number(p.year),uf:p.uf,municipality:p.municipality,zone:Number(p.zone),place:p.place,latitude,longitude};const key=[point.year,point.uf,point.municipality,point.zone,point.place].join(':');if(seen.has(key))throw new HttpError(400,'Local duplicado no GeoJSON.');seen.add(key);return point;});
+}

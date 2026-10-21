@@ -14,6 +14,8 @@ Navegador → Next.js App Router no Cloudflare Worker (OpenNext/nodejs_compat) �
 
 O contexto transacional `app.actor_id` associa alterações à auditoria. Não manter conexões de sessão entre requisições do Worker. Secrets são lidos somente no servidor.
 
+Resultados eleitorais usam três tabelas próprias, sem vínculos com contatos ou saúde. Consulta agregada exige `reports.read`; importação exige administrador e `users.manage`, revalidados na transação. Lotes têm SHA-256, origem, upsert por chave eleitoral e auditoria atômica. Veja [layout, limites e modelo geográfico](RESULTADOS-ELEITORAIS.md).
+
 ## Identidade e autorização
 
 Better Auth mantém login individual, senhas derivadas, cookies HttpOnly/SameSite=Lax e Secure em produção. Cadastro público bloqueado. Ativação por token de uso único. Logout e troca de senha são operações do usuário autenticado.
