@@ -16,6 +16,8 @@ O contexto transacional `app.actor_id` associa alterações à auditoria. Não m
 
 Resultados eleitorais usam três tabelas próprias, sem vínculos com contatos ou saúde. Consulta agregada exige `reports.read`; importação exige administrador e `users.manage`, revalidados na transação. Lotes têm SHA-256, origem, upsert por chave eleitoral e auditoria atômica. Veja [layout, limites e modelo geográfico](RESULTADOS-ELEITORAIS.md).
 
+O comparativo por candidatura separa montagem pura (`election-comparison.ts`), consulta do servidor (`election-comparison-query.ts`) e interface (`candidate-comparison.tsx`). A referência inicial é conferida por candidatura/ano, nunca por número de urna isolado. Cada linha mantém zona + seção, valores ausentes permanecem nulos, e a API exige `reports.read`. A mudança de zona entre 2016 e 2020 é apresentada sem correspondência presumida de eleitorado.
+
 ## Identidade e autorização
 
 Better Auth mantém login individual, senhas derivadas, cookies HttpOnly/SameSite=Lax e Secure em produção. Cadastro público bloqueado. Ativação por token de uso único. Logout e troca de senha são operações do usuário autenticado.

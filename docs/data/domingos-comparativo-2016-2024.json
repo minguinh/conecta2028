@@ -1,0 +1,1814 @@
+{
+  "verifiedAt": "2026-10-21T20:36:59.041Z",
+  "municipalityTse": "23060",
+  "uf": "PE",
+  "office": "13",
+  "turn": 1,
+  "candidate": "DOMINGOS LEANDRO DA FONSECA JUNIOR",
+  "candidacies": [
+    {
+      "year": 2016,
+      "election": "220",
+      "option": "45555",
+      "name": "DOMINGOS LEANDRO DA FONSECA JUNIOR",
+      "candidateSequence": "170000013481",
+      "sourceUrl": "https://cdn.tse.jus.br/estatistica/sead/odsele/votacao_secao/votacao_secao_2016_PE.zip"
+    },
+    {
+      "year": 2020,
+      "election": "426",
+      "option": "40000",
+      "name": "DOMINGOS LEANDRO DA FONSECA JUNIOR",
+      "candidateSequence": "170000747959",
+      "sourceUrl": "https://cdn.tse.jus.br/estatistica/sead/odsele/votacao_secao/votacao_secao_2020_PE.zip"
+    },
+    {
+      "year": 2024,
+      "election": "619",
+      "option": "45000",
+      "name": "DOMINGOS LEANDRO DA FONSECA JUNIOR",
+      "candidateSequence": "170002130211",
+      "sourceUrl": "https://cdn.tse.jus.br/estatistica/sead/odsele/votacao_secao/votacao_secao_2024_PE.zip"
+    }
+  ],
+  "totals": [
+    {
+      "year": 2016,
+      "candidate": {
+        "year": 2016,
+        "election": "220",
+        "option": "45555",
+        "name": "DOMINGOS LEANDRO DA FONSECA JUNIOR"
+      },
+      "votes": 646,
+      "sectionsWithRecords": 32,
+      "sectionsInElection": 32,
+      "zones": [
+        37
+      ]
+    },
+    {
+      "year": 2020,
+      "candidate": {
+        "year": 2020,
+        "election": "426",
+        "option": "40000",
+        "name": "DOMINGOS LEANDRO DA FONSECA JUNIOR"
+      },
+      "votes": 564,
+      "sectionsWithRecords": 33,
+      "sectionsInElection": 33,
+      "zones": [
+        38
+      ]
+    },
+    {
+      "year": 2024,
+      "candidate": {
+        "year": 2024,
+        "election": "619",
+        "option": "45000",
+        "name": "DOMINGOS LEANDRO DA FONSECA JUNIOR"
+      },
+      "votes": 495,
+      "sectionsWithRecords": 35,
+      "sectionsInElection": 35,
+      "zones": [
+        38
+      ]
+    }
+  ],
+  "sections": [
+    {
+      "zone": 37,
+      "section": 150,
+      "cells": {
+        "2016": {
+          "votes": 15,
+          "place": "1015",
+          "placeName": "COLEGIO MUNICIPAL PAULO PESSOA GUERRA",
+          "covered": true
+        },
+        "2020": {
+          "votes": null,
+          "place": null,
+          "placeName": null,
+          "covered": false
+        },
+        "2024": {
+          "votes": null,
+          "place": null,
+          "placeName": null,
+          "covered": false
+        }
+      },
+      "difference": null
+    },
+    {
+      "zone": 37,
+      "section": 151,
+      "cells": {
+        "2016": {
+          "votes": 20,
+          "place": "1015",
+          "placeName": "COLEGIO MUNICIPAL PAULO PESSOA GUERRA",
+          "covered": true
+        },
+        "2020": {
+          "votes": null,
+          "place": null,
+          "placeName": null,
+          "covered": false
+        },
+        "2024": {
+          "votes": null,
+          "place": null,
+          "placeName": null,
+          "covered": false
+        }
+      },
+      "difference": null
+    },
+    {
+      "zone": 37,
+      "section": 152,
+      "cells": {
+        "2016": {
+          "votes": 18,
+          "place": "1015",
+          "placeName": "COLEGIO MUNICIPAL PAULO PESSOA GUERRA",
+          "covered": true
+        },
+        "2020": {
+          "votes": null,
+          "place": null,
+          "placeName": null,
+          "covered": false
+        },
+        "2024": {
+          "votes": null,
+          "place": null,
+          "placeName": null,
+          "covered": false
+        }
+      },
+      "difference": null
+    },
+    {
+      "zone": 37,
+      "section": 153,
+      "cells": {
+        "2016": {
+          "votes": 21,
+          "place": "1015",
+          "placeName": "COLEGIO MUNICIPAL PAULO PESSOA GUERRA",
+          "covered": true
+        },
+        "2020": {
+          "votes": null,
+          "place": null,
+          "placeName": null,
+          "covered": false
+        },
+        "2024": {
+          "votes": null,
+          "place": null,
+          "placeName": null,
+          "covered": false
+        }
+      },
+      "difference": null
+    },
+    {
+      "zone": 37,
+      "section": 154,
+      "cells": {
+        "2016": {
+          "votes": 22,
+          "place": "1015",
+          "placeName": "COLEGIO MUNICIPAL PAULO PESSOA GUERRA",
+          "covered": true
+        },
+        "2020": {
+          "votes": null,
+          "place": null,
+          "placeName": null,
+          "covered": false
+        },
+        "2024": {
+          "votes": null,
+          "place": null,
+          "placeName": null,
+          "covered": false
+        }
+      },
+      "difference": null
+    },
+    {
+      "zone": 37,
+      "section": 155,
+      "cells": {
+        "2016": {
+          "votes": 23,
+          "place": "1015",
+          "placeName": "COLEGIO MUNICIPAL PAULO PESSOA GUERRA",
+          "covered": true
+        },
+        "2020": {
+          "votes": null,
+          "place": null,
+          "placeName": null,
+          "covered": false
+        },
+        "2024": {
+          "votes": null,
+          "place": null,
+          "placeName": null,
+          "covered": false
+        }
+      },
+      "difference": null
+    },
+    {
+      "zone": 37,
+      "section": 156,
+      "cells": {
+        "2016": {
+          "votes": 24,
+          "place": "1015",
+          "placeName": "COLEGIO MUNICIPAL PAULO PESSOA GUERRA",
+          "covered": true
+        },
+        "2020": {
+          "votes": null,
+          "place": null,
+          "placeName": null,
+          "covered": false
+        },
+        "2024": {
+          "votes": null,
+          "place": null,
+          "placeName": null,
+          "covered": false
+        }
+      },
+      "difference": null
+    },
+    {
+      "zone": 37,
+      "section": 157,
+      "cells": {
+        "2016": {
+          "votes": 23,
+          "place": "1015",
+          "placeName": "COLEGIO MUNICIPAL PAULO PESSOA GUERRA",
+          "covered": true
+        },
+        "2020": {
+          "votes": null,
+          "place": null,
+          "placeName": null,
+          "covered": false
+        },
+        "2024": {
+          "votes": null,
+          "place": null,
+          "placeName": null,
+          "covered": false
+        }
+      },
+      "difference": null
+    },
+    {
+      "zone": 37,
+      "section": 158,
+      "cells": {
+        "2016": {
+          "votes": 26,
+          "place": "1015",
+          "placeName": "COLEGIO MUNICIPAL PAULO PESSOA GUERRA",
+          "covered": true
+        },
+        "2020": {
+          "votes": null,
+          "place": null,
+          "placeName": null,
+          "covered": false
+        },
+        "2024": {
+          "votes": null,
+          "place": null,
+          "placeName": null,
+          "covered": false
+        }
+      },
+      "difference": null
+    },
+    {
+      "zone": 37,
+      "section": 159,
+      "cells": {
+        "2016": {
+          "votes": 30,
+          "place": "1015",
+          "placeName": "COLEGIO MUNICIPAL PAULO PESSOA GUERRA",
+          "covered": true
+        },
+        "2020": {
+          "votes": null,
+          "place": null,
+          "placeName": null,
+          "covered": false
+        },
+        "2024": {
+          "votes": null,
+          "place": null,
+          "placeName": null,
+          "covered": false
+        }
+      },
+      "difference": null
+    },
+    {
+      "zone": 37,
+      "section": 160,
+      "cells": {
+        "2016": {
+          "votes": 27,
+          "place": "1015",
+          "placeName": "COLEGIO MUNICIPAL PAULO PESSOA GUERRA",
+          "covered": true
+        },
+        "2020": {
+          "votes": null,
+          "place": null,
+          "placeName": null,
+          "covered": false
+        },
+        "2024": {
+          "votes": null,
+          "place": null,
+          "placeName": null,
+          "covered": false
+        }
+      },
+      "difference": null
+    },
+    {
+      "zone": 37,
+      "section": 161,
+      "cells": {
+        "2016": {
+          "votes": 18,
+          "place": "1074",
+          "placeName": "ESCOLA MUNICIPAL JOAO BEZERRA FILHO",
+          "covered": true
+        },
+        "2020": {
+          "votes": null,
+          "place": null,
+          "placeName": null,
+          "covered": false
+        },
+        "2024": {
+          "votes": null,
+          "place": null,
+          "placeName": null,
+          "covered": false
+        }
+      },
+      "difference": null
+    },
+    {
+      "zone": 37,
+      "section": 162,
+      "cells": {
+        "2016": {
+          "votes": 21,
+          "place": "1074",
+          "placeName": "ESCOLA MUNICIPAL JOAO BEZERRA FILHO",
+          "covered": true
+        },
+        "2020": {
+          "votes": null,
+          "place": null,
+          "placeName": null,
+          "covered": false
+        },
+        "2024": {
+          "votes": null,
+          "place": null,
+          "placeName": null,
+          "covered": false
+        }
+      },
+      "difference": null
+    },
+    {
+      "zone": 37,
+      "section": 163,
+      "cells": {
+        "2016": {
+          "votes": 21,
+          "place": "1074",
+          "placeName": "ESCOLA MUNICIPAL JOAO BEZERRA FILHO",
+          "covered": true
+        },
+        "2020": {
+          "votes": null,
+          "place": null,
+          "placeName": null,
+          "covered": false
+        },
+        "2024": {
+          "votes": null,
+          "place": null,
+          "placeName": null,
+          "covered": false
+        }
+      },
+      "difference": null
+    },
+    {
+      "zone": 37,
+      "section": 164,
+      "cells": {
+        "2016": {
+          "votes": 30,
+          "place": "1074",
+          "placeName": "ESCOLA MUNICIPAL JOAO BEZERRA FILHO",
+          "covered": true
+        },
+        "2020": {
+          "votes": null,
+          "place": null,
+          "placeName": null,
+          "covered": false
+        },
+        "2024": {
+          "votes": null,
+          "place": null,
+          "placeName": null,
+          "covered": false
+        }
+      },
+      "difference": null
+    },
+    {
+      "zone": 37,
+      "section": 165,
+      "cells": {
+        "2016": {
+          "votes": 19,
+          "place": "1074",
+          "placeName": "ESCOLA MUNICIPAL JOAO BEZERRA FILHO",
+          "covered": true
+        },
+        "2020": {
+          "votes": null,
+          "place": null,
+          "placeName": null,
+          "covered": false
+        },
+        "2024": {
+          "votes": null,
+          "place": null,
+          "placeName": null,
+          "covered": false
+        }
+      },
+      "difference": null
+    },
+    {
+      "zone": 37,
+      "section": 166,
+      "cells": {
+        "2016": {
+          "votes": 25,
+          "place": "1074",
+          "placeName": "ESCOLA MUNICIPAL JOAO BEZERRA FILHO",
+          "covered": true
+        },
+        "2020": {
+          "votes": null,
+          "place": null,
+          "placeName": null,
+          "covered": false
+        },
+        "2024": {
+          "votes": null,
+          "place": null,
+          "placeName": null,
+          "covered": false
+        }
+      },
+      "difference": null
+    },
+    {
+      "zone": 37,
+      "section": 167,
+      "cells": {
+        "2016": {
+          "votes": 27,
+          "place": "1074",
+          "placeName": "ESCOLA MUNICIPAL JOAO BEZERRA FILHO",
+          "covered": true
+        },
+        "2020": {
+          "votes": null,
+          "place": null,
+          "placeName": null,
+          "covered": false
+        },
+        "2024": {
+          "votes": null,
+          "place": null,
+          "placeName": null,
+          "covered": false
+        }
+      },
+      "difference": null
+    },
+    {
+      "zone": 37,
+      "section": 168,
+      "cells": {
+        "2016": {
+          "votes": 23,
+          "place": "1074",
+          "placeName": "ESCOLA MUNICIPAL JOAO BEZERRA FILHO",
+          "covered": true
+        },
+        "2020": {
+          "votes": null,
+          "place": null,
+          "placeName": null,
+          "covered": false
+        },
+        "2024": {
+          "votes": null,
+          "place": null,
+          "placeName": null,
+          "covered": false
+        }
+      },
+      "difference": null
+    },
+    {
+      "zone": 37,
+      "section": 169,
+      "cells": {
+        "2016": {
+          "votes": 23,
+          "place": "1074",
+          "placeName": "ESCOLA MUNICIPAL JOAO BEZERRA FILHO",
+          "covered": true
+        },
+        "2020": {
+          "votes": null,
+          "place": null,
+          "placeName": null,
+          "covered": false
+        },
+        "2024": {
+          "votes": null,
+          "place": null,
+          "placeName": null,
+          "covered": false
+        }
+      },
+      "difference": null
+    },
+    {
+      "zone": 37,
+      "section": 170,
+      "cells": {
+        "2016": {
+          "votes": 27,
+          "place": "1074",
+          "placeName": "ESCOLA MUNICIPAL JOAO BEZERRA FILHO",
+          "covered": true
+        },
+        "2020": {
+          "votes": null,
+          "place": null,
+          "placeName": null,
+          "covered": false
+        },
+        "2024": {
+          "votes": null,
+          "place": null,
+          "placeName": null,
+          "covered": false
+        }
+      },
+      "difference": null
+    },
+    {
+      "zone": 37,
+      "section": 171,
+      "cells": {
+        "2016": {
+          "votes": 23,
+          "place": "1082",
+          "placeName": "CLUBE MUNICIPAL DE XEXEU",
+          "covered": true
+        },
+        "2020": {
+          "votes": null,
+          "place": null,
+          "placeName": null,
+          "covered": false
+        },
+        "2024": {
+          "votes": null,
+          "place": null,
+          "placeName": null,
+          "covered": false
+        }
+      },
+      "difference": null
+    },
+    {
+      "zone": 37,
+      "section": 172,
+      "cells": {
+        "2016": {
+          "votes": 20,
+          "place": "1082",
+          "placeName": "CLUBE MUNICIPAL DE XEXEU",
+          "covered": true
+        },
+        "2020": {
+          "votes": null,
+          "place": null,
+          "placeName": null,
+          "covered": false
+        },
+        "2024": {
+          "votes": null,
+          "place": null,
+          "placeName": null,
+          "covered": false
+        }
+      },
+      "difference": null
+    },
+    {
+      "zone": 37,
+      "section": 173,
+      "cells": {
+        "2016": {
+          "votes": 20,
+          "place": "1082",
+          "placeName": "CLUBE MUNICIPAL DE XEXEU",
+          "covered": true
+        },
+        "2020": {
+          "votes": null,
+          "place": null,
+          "placeName": null,
+          "covered": false
+        },
+        "2024": {
+          "votes": null,
+          "place": null,
+          "placeName": null,
+          "covered": false
+        }
+      },
+      "difference": null
+    },
+    {
+      "zone": 37,
+      "section": 174,
+      "cells": {
+        "2016": {
+          "votes": 25,
+          "place": "1090",
+          "placeName": "ESCOLA MUNICIPAL TEREZINHA BARBOSA",
+          "covered": true
+        },
+        "2020": {
+          "votes": null,
+          "place": null,
+          "placeName": null,
+          "covered": false
+        },
+        "2024": {
+          "votes": null,
+          "place": null,
+          "placeName": null,
+          "covered": false
+        }
+      },
+      "difference": null
+    },
+    {
+      "zone": 37,
+      "section": 175,
+      "cells": {
+        "2016": {
+          "votes": 12,
+          "place": "1090",
+          "placeName": "ESCOLA MUNICIPAL TEREZINHA BARBOSA",
+          "covered": true
+        },
+        "2020": {
+          "votes": null,
+          "place": null,
+          "placeName": null,
+          "covered": false
+        },
+        "2024": {
+          "votes": null,
+          "place": null,
+          "placeName": null,
+          "covered": false
+        }
+      },
+      "difference": null
+    },
+    {
+      "zone": 37,
+      "section": 176,
+      "cells": {
+        "2016": {
+          "votes": 14,
+          "place": "1104",
+          "placeName": "GRUPO ESCOLAR MIRANDOLINA  PESSOA DE QUEIROZ",
+          "covered": true
+        },
+        "2020": {
+          "votes": null,
+          "place": null,
+          "placeName": null,
+          "covered": false
+        },
+        "2024": {
+          "votes": null,
+          "place": null,
+          "placeName": null,
+          "covered": false
+        }
+      },
+      "difference": null
+    },
+    {
+      "zone": 37,
+      "section": 177,
+      "cells": {
+        "2016": {
+          "votes": 7,
+          "place": "1104",
+          "placeName": "GRUPO ESCOLAR MIRANDOLINA  PESSOA DE QUEIROZ",
+          "covered": true
+        },
+        "2020": {
+          "votes": null,
+          "place": null,
+          "placeName": null,
+          "covered": false
+        },
+        "2024": {
+          "votes": null,
+          "place": null,
+          "placeName": null,
+          "covered": false
+        }
+      },
+      "difference": null
+    },
+    {
+      "zone": 37,
+      "section": 178,
+      "cells": {
+        "2016": {
+          "votes": 4,
+          "place": "1104",
+          "placeName": "GRUPO ESCOLAR MIRANDOLINA  PESSOA DE QUEIROZ",
+          "covered": true
+        },
+        "2020": {
+          "votes": null,
+          "place": null,
+          "placeName": null,
+          "covered": false
+        },
+        "2024": {
+          "votes": null,
+          "place": null,
+          "placeName": null,
+          "covered": false
+        }
+      },
+      "difference": null
+    },
+    {
+      "zone": 37,
+      "section": 179,
+      "cells": {
+        "2016": {
+          "votes": 16,
+          "place": "1104",
+          "placeName": "GRUPO ESCOLAR MIRANDOLINA  PESSOA DE QUEIROZ",
+          "covered": true
+        },
+        "2020": {
+          "votes": null,
+          "place": null,
+          "placeName": null,
+          "covered": false
+        },
+        "2024": {
+          "votes": null,
+          "place": null,
+          "placeName": null,
+          "covered": false
+        }
+      },
+      "difference": null
+    },
+    {
+      "zone": 37,
+      "section": 180,
+      "cells": {
+        "2016": {
+          "votes": 15,
+          "place": "1104",
+          "placeName": "GRUPO ESCOLAR MIRANDOLINA  PESSOA DE QUEIROZ",
+          "covered": true
+        },
+        "2020": {
+          "votes": null,
+          "place": null,
+          "placeName": null,
+          "covered": false
+        },
+        "2024": {
+          "votes": null,
+          "place": null,
+          "placeName": null,
+          "covered": false
+        }
+      },
+      "difference": null
+    },
+    {
+      "zone": 37,
+      "section": 181,
+      "cells": {
+        "2016": {
+          "votes": 7,
+          "place": "1104",
+          "placeName": "GRUPO ESCOLAR MIRANDOLINA  PESSOA DE QUEIROZ",
+          "covered": true
+        },
+        "2020": {
+          "votes": null,
+          "place": null,
+          "placeName": null,
+          "covered": false
+        },
+        "2024": {
+          "votes": null,
+          "place": null,
+          "placeName": null,
+          "covered": false
+        }
+      },
+      "difference": null
+    },
+    {
+      "zone": 38,
+      "section": 140,
+      "cells": {
+        "2016": {
+          "votes": null,
+          "place": null,
+          "placeName": null,
+          "covered": false
+        },
+        "2020": {
+          "votes": 18,
+          "place": "1015",
+          "placeName": "COLEGIO JOÃO PEREIRA SOBRINHO",
+          "covered": true
+        },
+        "2024": {
+          "votes": 11,
+          "place": "1015",
+          "placeName": "COLEGIO JOÃO PEREIRA SOBRINHO",
+          "covered": true
+        }
+      },
+      "difference": -7
+    },
+    {
+      "zone": 38,
+      "section": 141,
+      "cells": {
+        "2016": {
+          "votes": null,
+          "place": null,
+          "placeName": null,
+          "covered": false
+        },
+        "2020": {
+          "votes": 17,
+          "place": "1015",
+          "placeName": "COLEGIO JOÃO PEREIRA SOBRINHO",
+          "covered": true
+        },
+        "2024": {
+          "votes": 21,
+          "place": "1015",
+          "placeName": "COLEGIO JOÃO PEREIRA SOBRINHO",
+          "covered": true
+        }
+      },
+      "difference": 4
+    },
+    {
+      "zone": 38,
+      "section": 142,
+      "cells": {
+        "2016": {
+          "votes": null,
+          "place": null,
+          "placeName": null,
+          "covered": false
+        },
+        "2020": {
+          "votes": 15,
+          "place": "1015",
+          "placeName": "COLEGIO JOÃO PEREIRA SOBRINHO",
+          "covered": true
+        },
+        "2024": {
+          "votes": 18,
+          "place": "1015",
+          "placeName": "COLEGIO JOÃO PEREIRA SOBRINHO",
+          "covered": true
+        }
+      },
+      "difference": 3
+    },
+    {
+      "zone": 38,
+      "section": 143,
+      "cells": {
+        "2016": {
+          "votes": null,
+          "place": null,
+          "placeName": null,
+          "covered": false
+        },
+        "2020": {
+          "votes": 25,
+          "place": "1015",
+          "placeName": "COLEGIO JOÃO PEREIRA SOBRINHO",
+          "covered": true
+        },
+        "2024": {
+          "votes": 12,
+          "place": "1015",
+          "placeName": "COLEGIO JOÃO PEREIRA SOBRINHO",
+          "covered": true
+        }
+      },
+      "difference": -13
+    },
+    {
+      "zone": 38,
+      "section": 144,
+      "cells": {
+        "2016": {
+          "votes": null,
+          "place": null,
+          "placeName": null,
+          "covered": false
+        },
+        "2020": {
+          "votes": 21,
+          "place": "1015",
+          "placeName": "COLEGIO JOÃO PEREIRA SOBRINHO",
+          "covered": true
+        },
+        "2024": {
+          "votes": 17,
+          "place": "1015",
+          "placeName": "COLEGIO JOÃO PEREIRA SOBRINHO",
+          "covered": true
+        }
+      },
+      "difference": -4
+    },
+    {
+      "zone": 38,
+      "section": 145,
+      "cells": {
+        "2016": {
+          "votes": null,
+          "place": null,
+          "placeName": null,
+          "covered": false
+        },
+        "2020": {
+          "votes": 19,
+          "place": "1015",
+          "placeName": "COLEGIO JOÃO PEREIRA SOBRINHO",
+          "covered": true
+        },
+        "2024": {
+          "votes": 18,
+          "place": "1015",
+          "placeName": "COLEGIO JOÃO PEREIRA SOBRINHO",
+          "covered": true
+        }
+      },
+      "difference": -1
+    },
+    {
+      "zone": 38,
+      "section": 146,
+      "cells": {
+        "2016": {
+          "votes": null,
+          "place": null,
+          "placeName": null,
+          "covered": false
+        },
+        "2020": {
+          "votes": 15,
+          "place": "1015",
+          "placeName": "COLEGIO JOÃO PEREIRA SOBRINHO",
+          "covered": true
+        },
+        "2024": {
+          "votes": 19,
+          "place": "1015",
+          "placeName": "COLEGIO JOÃO PEREIRA SOBRINHO",
+          "covered": true
+        }
+      },
+      "difference": 4
+    },
+    {
+      "zone": 38,
+      "section": 147,
+      "cells": {
+        "2016": {
+          "votes": null,
+          "place": null,
+          "placeName": null,
+          "covered": false
+        },
+        "2020": {
+          "votes": 30,
+          "place": "1015",
+          "placeName": "COLEGIO JOÃO PEREIRA SOBRINHO",
+          "covered": true
+        },
+        "2024": {
+          "votes": 10,
+          "place": "1015",
+          "placeName": "COLEGIO JOÃO PEREIRA SOBRINHO",
+          "covered": true
+        }
+      },
+      "difference": -20
+    },
+    {
+      "zone": 38,
+      "section": 148,
+      "cells": {
+        "2016": {
+          "votes": null,
+          "place": null,
+          "placeName": null,
+          "covered": false
+        },
+        "2020": {
+          "votes": 15,
+          "place": "1015",
+          "placeName": "COLEGIO JOÃO PEREIRA SOBRINHO",
+          "covered": true
+        },
+        "2024": {
+          "votes": 16,
+          "place": "1015",
+          "placeName": "COLEGIO JOÃO PEREIRA SOBRINHO",
+          "covered": true
+        }
+      },
+      "difference": 1
+    },
+    {
+      "zone": 38,
+      "section": 149,
+      "cells": {
+        "2016": {
+          "votes": null,
+          "place": null,
+          "placeName": null,
+          "covered": false
+        },
+        "2020": {
+          "votes": 13,
+          "place": "1015",
+          "placeName": "COLEGIO JOÃO PEREIRA SOBRINHO",
+          "covered": true
+        },
+        "2024": {
+          "votes": 15,
+          "place": "1015",
+          "placeName": "COLEGIO JOÃO PEREIRA SOBRINHO",
+          "covered": true
+        }
+      },
+      "difference": 2
+    },
+    {
+      "zone": 38,
+      "section": 150,
+      "cells": {
+        "2016": {
+          "votes": null,
+          "place": null,
+          "placeName": null,
+          "covered": false
+        },
+        "2020": {
+          "votes": 14,
+          "place": "1015",
+          "placeName": "COLEGIO JOÃO PEREIRA SOBRINHO",
+          "covered": true
+        },
+        "2024": {
+          "votes": 7,
+          "place": "1015",
+          "placeName": "COLEGIO JOÃO PEREIRA SOBRINHO",
+          "covered": true
+        }
+      },
+      "difference": -7
+    },
+    {
+      "zone": 38,
+      "section": 151,
+      "cells": {
+        "2016": {
+          "votes": null,
+          "place": null,
+          "placeName": null,
+          "covered": false
+        },
+        "2020": {
+          "votes": 24,
+          "place": "1015",
+          "placeName": "COLEGIO JOÃO PEREIRA SOBRINHO",
+          "covered": true
+        },
+        "2024": {
+          "votes": 11,
+          "place": "1015",
+          "placeName": "COLEGIO JOÃO PEREIRA SOBRINHO",
+          "covered": true
+        }
+      },
+      "difference": -13
+    },
+    {
+      "zone": 38,
+      "section": 152,
+      "cells": {
+        "2016": {
+          "votes": null,
+          "place": null,
+          "placeName": null,
+          "covered": false
+        },
+        "2020": {
+          "votes": 11,
+          "place": "1074",
+          "placeName": "ESCOLA MUNICIPAL JOAO BEZERRA FILHO",
+          "covered": true
+        },
+        "2024": {
+          "votes": 7,
+          "place": "1074",
+          "placeName": "ESCOLA MUNICIPAL JOAO BEZERRA FILHO",
+          "covered": true
+        }
+      },
+      "difference": -4
+    },
+    {
+      "zone": 38,
+      "section": 153,
+      "cells": {
+        "2016": {
+          "votes": null,
+          "place": null,
+          "placeName": null,
+          "covered": false
+        },
+        "2020": {
+          "votes": 18,
+          "place": "1074",
+          "placeName": "ESCOLA MUNICIPAL JOAO BEZERRA FILHO",
+          "covered": true
+        },
+        "2024": {
+          "votes": 15,
+          "place": "1074",
+          "placeName": "ESCOLA MUNICIPAL JOAO BEZERRA FILHO",
+          "covered": true
+        }
+      },
+      "difference": -3
+    },
+    {
+      "zone": 38,
+      "section": 154,
+      "cells": {
+        "2016": {
+          "votes": null,
+          "place": null,
+          "placeName": null,
+          "covered": false
+        },
+        "2020": {
+          "votes": 14,
+          "place": "1074",
+          "placeName": "ESCOLA MUNICIPAL JOAO BEZERRA FILHO",
+          "covered": true
+        },
+        "2024": {
+          "votes": 11,
+          "place": "1074",
+          "placeName": "ESCOLA MUNICIPAL JOAO BEZERRA FILHO",
+          "covered": true
+        }
+      },
+      "difference": -3
+    },
+    {
+      "zone": 38,
+      "section": 155,
+      "cells": {
+        "2016": {
+          "votes": null,
+          "place": null,
+          "placeName": null,
+          "covered": false
+        },
+        "2020": {
+          "votes": 16,
+          "place": "1074",
+          "placeName": "ESCOLA MUNICIPAL JOAO BEZERRA FILHO",
+          "covered": true
+        },
+        "2024": {
+          "votes": 15,
+          "place": "1074",
+          "placeName": "ESCOLA MUNICIPAL JOAO BEZERRA FILHO",
+          "covered": true
+        }
+      },
+      "difference": -1
+    },
+    {
+      "zone": 38,
+      "section": 156,
+      "cells": {
+        "2016": {
+          "votes": null,
+          "place": null,
+          "placeName": null,
+          "covered": false
+        },
+        "2020": {
+          "votes": 16,
+          "place": "1074",
+          "placeName": "ESCOLA MUNICIPAL JOAO BEZERRA FILHO",
+          "covered": true
+        },
+        "2024": {
+          "votes": 18,
+          "place": "1074",
+          "placeName": "ESCOLA MUNICIPAL JOAO BEZERRA FILHO",
+          "covered": true
+        }
+      },
+      "difference": 2
+    },
+    {
+      "zone": 38,
+      "section": 157,
+      "cells": {
+        "2016": {
+          "votes": null,
+          "place": null,
+          "placeName": null,
+          "covered": false
+        },
+        "2020": {
+          "votes": 17,
+          "place": "1074",
+          "placeName": "ESCOLA MUNICIPAL JOAO BEZERRA FILHO",
+          "covered": true
+        },
+        "2024": {
+          "votes": 15,
+          "place": "1074",
+          "placeName": "ESCOLA MUNICIPAL JOAO BEZERRA FILHO",
+          "covered": true
+        }
+      },
+      "difference": -2
+    },
+    {
+      "zone": 38,
+      "section": 158,
+      "cells": {
+        "2016": {
+          "votes": null,
+          "place": null,
+          "placeName": null,
+          "covered": false
+        },
+        "2020": {
+          "votes": 15,
+          "place": "1074",
+          "placeName": "ESCOLA MUNICIPAL JOAO BEZERRA FILHO",
+          "covered": true
+        },
+        "2024": {
+          "votes": 13,
+          "place": "1074",
+          "placeName": "ESCOLA MUNICIPAL JOAO BEZERRA FILHO",
+          "covered": true
+        }
+      },
+      "difference": -2
+    },
+    {
+      "zone": 38,
+      "section": 159,
+      "cells": {
+        "2016": {
+          "votes": null,
+          "place": null,
+          "placeName": null,
+          "covered": false
+        },
+        "2020": {
+          "votes": 9,
+          "place": "1074",
+          "placeName": "ESCOLA MUNICIPAL JOAO BEZERRA FILHO",
+          "covered": true
+        },
+        "2024": {
+          "votes": 15,
+          "place": "1074",
+          "placeName": "ESCOLA MUNICIPAL JOAO BEZERRA FILHO",
+          "covered": true
+        }
+      },
+      "difference": 6
+    },
+    {
+      "zone": 38,
+      "section": 160,
+      "cells": {
+        "2016": {
+          "votes": null,
+          "place": null,
+          "placeName": null,
+          "covered": false
+        },
+        "2020": {
+          "votes": 14,
+          "place": "1074",
+          "placeName": "ESCOLA MUNICIPAL JOAO BEZERRA FILHO",
+          "covered": true
+        },
+        "2024": {
+          "votes": 16,
+          "place": "1074",
+          "placeName": "ESCOLA MUNICIPAL JOAO BEZERRA FILHO",
+          "covered": true
+        }
+      },
+      "difference": 2
+    },
+    {
+      "zone": 38,
+      "section": 161,
+      "cells": {
+        "2016": {
+          "votes": null,
+          "place": null,
+          "placeName": null,
+          "covered": false
+        },
+        "2020": {
+          "votes": 20,
+          "place": "1074",
+          "placeName": "ESCOLA MUNICIPAL JOAO BEZERRA FILHO",
+          "covered": true
+        },
+        "2024": {
+          "votes": 18,
+          "place": "1074",
+          "placeName": "ESCOLA MUNICIPAL JOAO BEZERRA FILHO",
+          "covered": true
+        }
+      },
+      "difference": -2
+    },
+    {
+      "zone": 38,
+      "section": 162,
+      "cells": {
+        "2016": {
+          "votes": null,
+          "place": null,
+          "placeName": null,
+          "covered": false
+        },
+        "2020": {
+          "votes": 25,
+          "place": "1082",
+          "placeName": "CLUBE MUNICIPAL DE XEXEU",
+          "covered": true
+        },
+        "2024": {
+          "votes": 19,
+          "place": "1082",
+          "placeName": "CLUBE MUNICIPAL DE XEXEU",
+          "covered": true
+        }
+      },
+      "difference": -6
+    },
+    {
+      "zone": 38,
+      "section": 163,
+      "cells": {
+        "2016": {
+          "votes": null,
+          "place": null,
+          "placeName": null,
+          "covered": false
+        },
+        "2020": {
+          "votes": 22,
+          "place": "1082",
+          "placeName": "CLUBE MUNICIPAL DE XEXEU",
+          "covered": true
+        },
+        "2024": {
+          "votes": 17,
+          "place": "1082",
+          "placeName": "CLUBE MUNICIPAL DE XEXEU",
+          "covered": true
+        }
+      },
+      "difference": -5
+    },
+    {
+      "zone": 38,
+      "section": 164,
+      "cells": {
+        "2016": {
+          "votes": null,
+          "place": null,
+          "placeName": null,
+          "covered": false
+        },
+        "2020": {
+          "votes": 24,
+          "place": "1082",
+          "placeName": "CLUBE MUNICIPAL DE XEXEU",
+          "covered": true
+        },
+        "2024": {
+          "votes": 17,
+          "place": "1082",
+          "placeName": "CLUBE MUNICIPAL DE XEXEU",
+          "covered": true
+        }
+      },
+      "difference": -7
+    },
+    {
+      "zone": 38,
+      "section": 165,
+      "cells": {
+        "2016": {
+          "votes": null,
+          "place": null,
+          "placeName": null,
+          "covered": false
+        },
+        "2020": {
+          "votes": 21,
+          "place": "1090",
+          "placeName": "ESCOLA MUNICIPAL TEREZINHA BARBOSA",
+          "covered": true
+        },
+        "2024": {
+          "votes": 14,
+          "place": "1090",
+          "placeName": "ESCOLA MUNICIPAL TEREZINHA BARBOSA",
+          "covered": true
+        }
+      },
+      "difference": -7
+    },
+    {
+      "zone": 38,
+      "section": 166,
+      "cells": {
+        "2016": {
+          "votes": null,
+          "place": null,
+          "placeName": null,
+          "covered": false
+        },
+        "2020": {
+          "votes": 10,
+          "place": "1090",
+          "placeName": "ESCOLA MUNICIPAL TEREZINHA BARBOSA",
+          "covered": true
+        },
+        "2024": {
+          "votes": 15,
+          "place": "1090",
+          "placeName": "ESCOLA MUNICIPAL TEREZINHA BARBOSA",
+          "covered": true
+        }
+      },
+      "difference": 5
+    },
+    {
+      "zone": 38,
+      "section": 167,
+      "cells": {
+        "2016": {
+          "votes": null,
+          "place": null,
+          "placeName": null,
+          "covered": false
+        },
+        "2020": {
+          "votes": 16,
+          "place": "1104",
+          "placeName": "GRUPO ESCOLAR ANTONIO JOAQUIM DE GOUVEIA",
+          "covered": true
+        },
+        "2024": {
+          "votes": 14,
+          "place": "1104",
+          "placeName": "GRUPO ESCOLAR ANTONIO JOAQUIM DE GOUVEIA",
+          "covered": true
+        }
+      },
+      "difference": -2
+    },
+    {
+      "zone": 38,
+      "section": 168,
+      "cells": {
+        "2016": {
+          "votes": null,
+          "place": null,
+          "placeName": null,
+          "covered": false
+        },
+        "2020": {
+          "votes": 9,
+          "place": "1104",
+          "placeName": "GRUPO ESCOLAR ANTONIO JOAQUIM DE GOUVEIA",
+          "covered": true
+        },
+        "2024": {
+          "votes": 13,
+          "place": "1104",
+          "placeName": "GRUPO ESCOLAR ANTONIO JOAQUIM DE GOUVEIA",
+          "covered": true
+        }
+      },
+      "difference": 4
+    },
+    {
+      "zone": 38,
+      "section": 169,
+      "cells": {
+        "2016": {
+          "votes": null,
+          "place": null,
+          "placeName": null,
+          "covered": false
+        },
+        "2020": {
+          "votes": 12,
+          "place": "1104",
+          "placeName": "GRUPO ESCOLAR ANTONIO JOAQUIM DE GOUVEIA",
+          "covered": true
+        },
+        "2024": {
+          "votes": 13,
+          "place": "1104",
+          "placeName": "GRUPO ESCOLAR ANTONIO JOAQUIM DE GOUVEIA",
+          "covered": true
+        }
+      },
+      "difference": 1
+    },
+    {
+      "zone": 38,
+      "section": 170,
+      "cells": {
+        "2016": {
+          "votes": null,
+          "place": null,
+          "placeName": null,
+          "covered": false
+        },
+        "2020": {
+          "votes": 19,
+          "place": "1104",
+          "placeName": "GRUPO ESCOLAR ANTONIO JOAQUIM DE GOUVEIA",
+          "covered": true
+        },
+        "2024": {
+          "votes": 15,
+          "place": "1104",
+          "placeName": "GRUPO ESCOLAR ANTONIO JOAQUIM DE GOUVEIA",
+          "covered": true
+        }
+      },
+      "difference": -4
+    },
+    {
+      "zone": 38,
+      "section": 171,
+      "cells": {
+        "2016": {
+          "votes": null,
+          "place": null,
+          "placeName": null,
+          "covered": false
+        },
+        "2020": {
+          "votes": 16,
+          "place": "1104",
+          "placeName": "GRUPO ESCOLAR ANTONIO JOAQUIM DE GOUVEIA",
+          "covered": true
+        },
+        "2024": {
+          "votes": 17,
+          "place": "1104",
+          "placeName": "GRUPO ESCOLAR ANTONIO JOAQUIM DE GOUVEIA",
+          "covered": true
+        }
+      },
+      "difference": 1
+    },
+    {
+      "zone": 38,
+      "section": 172,
+      "cells": {
+        "2016": {
+          "votes": null,
+          "place": null,
+          "placeName": null,
+          "covered": false
+        },
+        "2020": {
+          "votes": 14,
+          "place": "1104",
+          "placeName": "GRUPO ESCOLAR ANTONIO JOAQUIM DE GOUVEIA",
+          "covered": true
+        },
+        "2024": {
+          "votes": 7,
+          "place": "1104",
+          "placeName": "GRUPO ESCOLAR ANTONIO JOAQUIM DE GOUVEIA",
+          "covered": true
+        }
+      },
+      "difference": -7
+    },
+    {
+      "zone": 38,
+      "section": 190,
+      "cells": {
+        "2016": {
+          "votes": null,
+          "place": null,
+          "placeName": null,
+          "covered": false
+        },
+        "2020": {
+          "votes": null,
+          "place": null,
+          "placeName": null,
+          "covered": false
+        },
+        "2024": {
+          "votes": 6,
+          "place": "1090",
+          "placeName": "ESCOLA MUNICIPAL TEREZINHA BARBOSA",
+          "covered": true
+        }
+      },
+      "difference": null
+    },
+    {
+      "zone": 38,
+      "section": 192,
+      "cells": {
+        "2016": {
+          "votes": null,
+          "place": null,
+          "placeName": null,
+          "covered": false
+        },
+        "2020": {
+          "votes": null,
+          "place": null,
+          "placeName": null,
+          "covered": false
+        },
+        "2024": {
+          "votes": 10,
+          "place": "1082",
+          "placeName": "CLUBE MUNICIPAL DE XEXEU",
+          "covered": true
+        }
+      },
+      "difference": null
+    }
+  ],
+  "source2016": {
+    "preparedAt": "2026-10-21T20:33:39.704660+00:00",
+    "year": 2016,
+    "uf": "PE",
+    "municipalityTse": "23060",
+    "municipality": "Xexéu",
+    "resultRows": 1193,
+    "pollingPlaces": 5,
+    "geocodedPlaces": 0,
+    "sources": {
+      "results": "https://cdn.tse.jus.br/estatistica/sead/odsele/votacao_secao/votacao_secao_2016_PE.zip",
+      "places": null
+    },
+    "sha256": {
+      "resultsArchive": "1fc0040bc42f212a1dc3263519f159a4363a861bb5261643ccd576c9f5087aad",
+      "placesArchive": null,
+      "csv": "fe3f7636865bf165a0bfcee4ef2401f1bed7a18ae843167947744aa02ccc6c21",
+      "geojson": null
+    },
+    "sourceGenerationDates": [
+      "07/12/2023"
+    ],
+    "totals": [
+      {
+        "election": "220",
+        "turn": 1,
+        "office": "11",
+        "officeName": "PREFEITO",
+        "rows": 128,
+        "votesIncludingBlankAndNull": 8738,
+        "sections": 32,
+        "places": 5
+      },
+      {
+        "election": "220",
+        "turn": 1,
+        "office": "13",
+        "officeName": "VEREADOR",
+        "rows": 1065,
+        "votesIncludingBlankAndNull": 8738,
+        "sections": 32,
+        "places": 5
+      }
+    ],
+    "imports": [
+      {
+        "id": "b8f5970a-9ea0-4122-9ad5-995aee6fc0a5",
+        "kind": "results",
+        "sourceUrl": "https://cdn.tse.jus.br/estatistica/sead/odsele/votacao_secao/votacao_secao_2016_PE.zip",
+        "checksum": "5982338d4f04b33f52db1c5206528e5514566dcb8ef8cb893253169063462721",
+        "rowCount": 1193,
+        "createdAt": "2026-10-21T20:34:13.443Z"
+      }
+    ]
+  },
+  "verification": "Every candidate section cell and total matches the official CSVs; 2016 import audit verified. Missing values are not inferred as zero."
+}

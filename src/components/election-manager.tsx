@@ -7,6 +7,7 @@ import {Button} from './ui/button';
 import {hasPermission,type Role} from '@/lib/permissions';
 import styles from './election-manager.module.css';
 import {api} from '@/lib/api-client';
+import {CandidateComparisonPanel} from './candidate-comparison';
 const ElectionMap=dynamic(()=>import('./election-map'),{ssr:false,loading:()=> <p role="status">Carregando mapa…</p>});
 type Row=Record<string,string|number|null>;
 type Data={catalog:Row[];selected:Row|null;totals:Row[];places:Row[];history:Row[];imports:{id:string;kind:string;sourceUrl:string;rowCount:number;createdAt:string}[]};
@@ -19,6 +20,7 @@ export function ElectionManager({role}:{role:Role}){
  const sum=data?.places.reduce((n,r)=>n+Number(r.votes),0)||0;const sections=data?.places.reduce((n,r)=>n+Number(r.sections),0)||0;
  return <main id="conteudo" tabIndex={-1} className={`management-page ${styles.page}`}><WorkspaceNavigation role={role}/><header className="module-heading"><div><h1><ChartNoAxesColumn aria-hidden="true"/>Resultados eleitorais</h1><p>Histórico de votação por eleição, cargo, seção e local de votação.</p></div><a href="https://dadosabertos.tse.jus.br/group/resultados" target="_blank" rel="noreferrer">Consultar arquivos do TSE ↗</a></header>
  <p className={styles.notice}><ShieldCheck size={20} aria-hidden="true"/> Somente resultados públicos agregados. Nenhum vínculo com contatos, preferências individuais ou informações de saúde.</p>
+ <CandidateComparisonPanel/>
  {error&&<div role="alert" className={styles.error}><p>{error}</p><Button type="button" variant="outline" disabled={busy||loading} onClick={()=>setRetry(r=>r+1)}>Tentar novamente</Button></div>}{message&&<p role="status" className={styles.notice}>{message}</p>}
  <section className={styles.card} aria-busy={loading}><label>Eleição, turno, cargo e município<select value={selection|| (data?.selected?key(data.selected):'')} onChange={e=>setSelection(e.target.value)} disabled={!data?.catalog.length||loading}><option value="" disabled>Selecione um recorte</option>{data?.catalog.map(r=><option key={key(r)} value={key(r)}>{r.year} · eleição {r.election} · {r.turn}º turno · {r.office_name} · {r.municipality_name}/{r.uf}</option>)}</select></label>{loading&&<p role="status">Consultando resultados…</p>}{data&&!data.selected&&!loading&&<div className={styles.empty}><ChartNoAxesColumn size={40} aria-hidden="true"/><h2>Nenhum resultado importado</h2><p>Importe arquivos oficiais para consultar a votação e comparar o histórico. Os indicadores serão calculados com os registros do banco.</p></div>}</section>
  {data?.selected&&<><div className={styles.metrics}><section className={styles.card}><strong>{number(sum)}</strong><span>Votos registrados no recorte</span></section><section className={styles.card}><strong>{number(sections)}</strong><span>Seções com registros</span></section><section className={styles.card}><strong>{number(data.places.length)}</strong><span>Locais com registros</span></section></div><p>Os totais representam os lotes importados e podem ser parciais. Votos brancos, nulos e de legenda permanecem identificados conforme o arquivo.</p>

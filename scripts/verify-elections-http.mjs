@@ -44,3 +44,17 @@ assert.equal((await db`select count(*)::int n from information_schema.tables whe
 await db`update "user" set active=false where id=${actors.administrador_geral.id}`;
 assert.ok([401,403].includes((await call('POST',payload,admin)).status));await db`update "user" set active=true where id=${actors.administrador_geral.id}`;
 console.log(`Election integration passed: ${checks} HTTP checks; aggregate fixtures remain only in the isolated test database.`);
+const comparisonLogin=await fetch(base+'/api/auth/sign-in/email',{method:'POST',headers:{origin:base,'content-type':'application/json'},body:JSON.stringify({email:'admin@elections.invalid',password})});assert.equal(comparisonLogin.status,200);const comparisonAdmin=comparisonLogin.headers.getSetCookie().map(c=>c.split(';')[0]).join('; ');
+async function comparison(cookie,query=''){const r=await fetch(base+'/api/elections/comparison'+query,{headers:cookie?{cookie}:{}});checks++;return {status:r.status,body:await r.json()};}
+assert.equal((await comparison()).status,401);
+assert.equal((await comparison(actors.assessor.cookie)).status,403);
+assert.deepEqual((await comparison(comparisonAdmin)).body.totals.map(t=>t.votes),[null,null,null]);
+const candidateRow=(year,election,section,option,votes,name)=>row(year,election,section,option,votes).replace(';11;Prefeito;',';13;Vereador;').replace(';99999;MUNICIPIO TESTE;',';23060;XEXEU;').replace('OPCAO '+option,name);
+const candidateName='DOMINGOS LEANDRO DA FONSECA JUNIOR';
+const comparisonRows=[candidateRow(2016,220,1,45555,6,candidateName),candidateRow(2016,220,2,45555,0,candidateName),candidateRow(2020,426,1,40000,8,candidateName),candidateRow(2024,619,1,45000,5,candidateName),candidateRow(2024,619,1,45555,99,'OUTRA CANDIDATURA'),candidateRow(2024,619,2,45555,4,'OUTRA CANDIDATURA')];
+assert.equal((await call('POST',{...payload,csv:header+'\n'+comparisonRows.join('\n')},comparisonAdmin)).status,201);
+for(const role of ['administrador_geral','coordenador','analista']){r=await comparison(role==='administrador_geral'?comparisonAdmin:actors[role].cookie);assert.equal(r.status,200,JSON.stringify(r.body));assert.deepEqual(r.body.totals.map(t=>t.votes),[6,8,5]);assert.equal(r.body.sections[0].difference,-3);assert.equal(r.body.sections[1].cells[2016].votes,0);assert.equal(r.body.sections[1].cells[2020].votes,null);assert.equal(r.body.sections[1].cells[2024].votes,null);}
+r=await comparison(comparisonAdmin,'?candidate2024=619:45555');assert.equal(r.status,200);assert.equal(r.body.totals[2].votes,103);
+assert.equal((await comparison(comparisonAdmin,'?candidate2024=220:45555')).status,400);
+assert.equal((await comparison(comparisonAdmin,'?candidate2024='+encodeURIComponent("' OR true --"))).status,400);
+console.log(`Comparison integration passed; ${checks} total HTTP checks including role restrictions, ballot-number reuse, explicit zero and missing sections.`);

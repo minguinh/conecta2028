@@ -31,6 +31,30 @@ Exemplo sintático fictício: não importar como informação oficial. Limite de
 
 ## Consulta e comparação
 
+### Comparativo de candidaturas por seção
+
+O painel **Comparativo por candidato** consulta `GET /api/elections/comparison`, protegido por `reports.read`, e usa apenas resultados públicos para vereador (cargo 13), primeiro turno, Xexéu–PE (23060), nos anos de 2016, 2020 e 2024. O usuário pode selecionar explicitamente a candidatura de cada ano, buscar uma zona/seção e baixar a matriz em CSV. O gráfico e os totais usam a candidatura inteira; a busca filtra as linhas exibidas, sem mudar os totais ou a exportação.
+
+A referência inicial solicitada pelo proprietário é **DOMINGOS LEANDRO DA FONSECA JUNIOR**. A correspondência foi conferida nos arquivos oficiais por nome, município, cargo, eleição, número de urna e identificador público de candidatura:
+
+| Ano | Eleição TSE | Número | SQ_CANDIDATO da fonte | Votos | Zona | Seções com registro |
+|---|---|---|---|---:|---:|---:|
+| 2016 | 220 | 45555 | 170000013481 | 646 | 37 | 32 |
+| 2020 | 426 | 40000 | 170000747959 | 564 | 38 | 33 |
+| 2024 | 619 | 45000 | 170002130211 | 495 | 38 | 35 |
+
+O número **45555 de 2024 pertence a outra candidatura** e não é usado automaticamente na referência de Domingos. O mapeamento explícito fica em `src/lib/election-comparison.ts`; não há vínculo com o cadastro de contatos ou inferência automática de identidade entre anos. Se os identificadores e o nome esperados não estiverem no banco, o ano permanece sem candidatura confirmada.
+
+**Mudança de zona e numeração:** o arquivo de 2016 contém zona 37, seções 150–181. Os de 2020/2024 contêm zona 38, seções 140–172, com 190 e 192 também presentes em 2024. A chave de linha é **zona + seção**: o painel mantém 67 pares históricos distintos e não força correspondência entre zonas diferentes. Não foi importada uma tabela oficial de equivalência entre essas numerações. Comparar a mesma numeração não comprova permanência do mesmo eleitorado.
+
+Os registros ausentes aparecem como **“—”**, nunca como zero presumido. Zero é exibido somente quando existe explicitamente na linha da fonte. A diferença 2024 menos 2020 só é calculada quando os dois registros da mesma zona/seção existem; cada célula conserva o código e o nome do local daquele ano. Não há estimativas de votos individuais nem recomendações de segmentação de pessoas.
+
+Em 21/10/2026 também foi importado o recorte municipal de [2016, votação por seção — PE](https://dadosabertos.tse.jus.br/dataset/resultados-2016): 1.193 registros agregados de prefeito/vereador, 32 seções e cinco locais. As coordenadas de 2016 não foram importadas nem estimadas. O arquivo oficial é compatível com o layout validado existente. O [manifesto do comparativo](data/domingos-comparativo-2016-2024.json) registra as candidaturas, os votos por seção verificados contra as três fontes, os totais e a origem/auditoria do lote de 2016.
+
+O preparador aceita agora `--year 2016`; `--places-zip` é opcional, permitindo preparar somente resultados quando não houver arquivo geográfico conferido para o ano. O código publicado não contém votos fixos para a interface: os valores são consultados no Neon. Os arquivos JSON da documentação são comprovantes da conferência, e não fonte de dados do painel.
+
+Testes cobrem número de urna reutilizado por outro candidato, escolha explícita, identificadores inválidos, zero versus ausência, mudança de zona com seção homônima, soma por candidatura, CSV e restrições de acesso. Os testes HTTP rodam exclusivamente no banco isolado `electoral_test`.
+
 O seletor escolhe um único ano/eleição/turno/cargo/UF/município. A tabela de opções preserva nomes e códigos do arquivo, inclusive brancos, nulos ou legenda. Percentuais usam todos os votos do recorte importado, não somente votos válidos. Comparação histórica usa mesmo município/código de cargo/turno e separa códigos de eleição: não presume identidade de candidatos entre anos. Totais, quantidade de seções e locais ajudam a avaliar a cobertura; mudanças de seções, locais e abrangência impedem interpretar variações como migração de preferência individual.
 
 Dados são sempre rotulados como cobertura potencialmente parcial. O catálogo exibe até 1.000 recortes, a votação até 500 opções, o mapa/tabela até 1.000 locais e o histórico até 100 eleições. Destina-se inicialmente à análise municipal. Não certifica completude de uma UF ou do país. Nenhum resultado oficial é pré-carregado nesta entrega.

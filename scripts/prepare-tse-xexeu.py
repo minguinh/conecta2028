@@ -37,9 +37,9 @@ def municipal_rows(archive):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--year', type=int, choices=[2020, 2024], required=True)
+    parser.add_argument('--year', type=int, choices=[2016, 2020, 2024], required=True)
     parser.add_argument('--results-zip', type=Path, required=True)
-    parser.add_argument('--places-zip', type=Path, required=True)
+    parser.add_argument('--places-zip', type=Path, help='Optional official geography archive for the same year')
     parser.add_argument('--output', type=Path, default=Path('.cloudflare-artifacts/tse-xexeu'))
     args = parser.parse_args()
     args.output.mkdir(parents=True, exist_ok=True)
@@ -54,7 +54,7 @@ def main():
     if len(rows) > 2000 or csv_path.stat().st_size > 1_500_000:
         raise ValueError('Municipality excerpt exceeds the application batch limit')
     expected_places = {(int(r['NR_ZONA']), str(int(r['NR_LOCAL_VOTACAO']))) for r in rows}
-    _, location_rows = municipal_rows(args.places_zip)
+    _, location_rows = municipal_rows(args.places_zip) if args.places_zip else ([], [])
     points = {}
     for r in location_rows:
         if int(r['AA_ELEICAO']) != args.year:
@@ -70,10 +70,11 @@ def main():
         if key in points and points[key]['geometry']['coordinates'] != coordinates:
             raise ValueError('Conflicting coordinates for the same official polling place')
         points[key] = {'type': 'Feature', 'properties': {'year': args.year, 'uf': 'PE', 'municipality': '23060', 'zone': key[0], 'place': key[1]}, 'geometry': {'type': 'Point', 'coordinates': coordinates}}
-    if set(points) != expected_places:
+    if args.places_zip and set(points) != expected_places:
         raise ValueError('Some polling places have no corresponding official coordinates')
     geo_path = args.output / f'xexeu-locais-{args.year}.geojson'
-    geo_path.write_text(json.dumps({'type': 'FeatureCollection', 'features': list(points.values())}, ensure_ascii=False), encoding='utf-8')
+    if args.places_zip:
+        geo_path.write_text(json.dumps({'type': 'FeatureCollection', 'features': list(points.values())}, ensure_ascii=False), encoding='utf-8')
     totals = defaultdict(lambda: {'rows': 0, 'votes': 0, 'sections': set(), 'places': set()})
     for row in rows:
         key = (row['CD_ELEICAO'], row['NR_TURNO'], row['CD_CARGO'], row['DS_CARGO'])
@@ -82,9 +83,9 @@ def main():
         t['votes'] += int(row['QT_VOTOS'])
         t['sections'].add((row['NR_ZONA'], row['NR_SECAO']))
         t['places'].add((row['NR_ZONA'], row['NR_LOCAL_VOTACAO']))
-    manifest = {'preparedAt': datetime.now(timezone.utc).isoformat(), 'year': args.year, 'uf': 'PE', 'municipalityTse': '23060', 'municipality': 'Xexéu', 'resultRows': len(rows), 'pollingPlaces': len(points), 'sources': {'results': f'https://cdn.tse.jus.br/estatistica/sead/odsele/votacao_secao/votacao_secao_{args.year}_PE.zip', 'places': f'https://cdn.tse.jus.br/estatistica/sead/odsele/eleitorado_locais_votacao/eleitorado_local_votacao_{args.year}.zip'}, 'sha256': {'resultsArchive': sha256(args.results_zip), 'placesArchive': sha256(args.places_zip), 'csv': sha256(csv_path), 'geojson': sha256(geo_path)}, 'sourceGenerationDates': sorted({r['DT_GERACAO'] for r in rows}), 'totals': [{'election': k[0], 'turn': int(k[1]), 'office': k[2], 'officeName': k[3], 'rows': v['rows'], 'votesIncludingBlankAndNull': v['votes'], 'sections': len(v['sections']), 'places': len(v['places'])} for k, v in sorted(totals.items())]}
+    manifest = {'preparedAt': datetime.now(timezone.utc).isoformat(), 'year': args.year, 'uf': 'PE', 'municipalityTse': '23060', 'municipality': 'Xexéu', 'resultRows': len(rows), 'pollingPlaces': len(expected_places), 'geocodedPlaces': len(points), 'sources': {'results': f'https://cdn.tse.jus.br/estatistica/sead/odsele/votacao_secao/votacao_secao_{args.year}_PE.zip', 'places': f'https://cdn.tse.jus.br/estatistica/sead/odsele/eleitorado_locais_votacao/eleitorado_local_votacao_{args.year}.zip' if args.places_zip else None}, 'sha256': {'resultsArchive': sha256(args.results_zip), 'placesArchive': sha256(args.places_zip) if args.places_zip else None, 'csv': sha256(csv_path), 'geojson': sha256(geo_path) if args.places_zip else None}, 'sourceGenerationDates': sorted({r['DT_GERACAO'] for r in rows}), 'totals': [{'election': k[0], 'turn': int(k[1]), 'office': k[2], 'officeName': k[3], 'rows': v['rows'], 'votesIncludingBlankAndNull': v['votes'], 'sections': len(v['sections']), 'places': len(v['places'])} for k, v in sorted(totals.items())]}
     (args.output / f'manifest-{args.year}.json').write_text(json.dumps(manifest, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
-    print(json.dumps({'year': args.year, 'rows': len(rows), 'places': len(points), 'output': str(args.output)}))
+    print(json.dumps({'year': args.year, 'rows': len(rows), 'pollingPlaces': len(expected_places), 'geocodedPlaces': len(points), 'output': str(args.output)}))
 
 
 if __name__ == '__main__':
