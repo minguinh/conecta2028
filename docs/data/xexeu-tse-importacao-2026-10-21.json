@@ -1,0 +1,130 @@
+[
+  {
+    "preparedAt": "2026-10-21T18:53:55.550801+00:00",
+    "year": 2020,
+    "uf": "PE",
+    "municipalityTse": "23060",
+    "municipality": "Xexéu",
+    "resultRows": 1189,
+    "pollingPlaces": 5,
+    "sources": {
+      "results": "https://cdn.tse.jus.br/estatistica/sead/odsele/votacao_secao/votacao_secao_2020_PE.zip",
+      "places": "https://cdn.tse.jus.br/estatistica/sead/odsele/eleitorado_locais_votacao/eleitorado_local_votacao_2020.zip"
+    },
+    "sha256": {
+      "resultsArchive": "5762dfa5cdf76843e53470eaea635e1486564837018a14dbf2278c2bae079311",
+      "placesArchive": "ae71d2f1fafdac239e785cabc026f0cea66a60646750d9ad0d585402f4a72b30",
+      "csv": "42a0abf4f60299c261b49565b45e4ddb15961a8bbd62c82d2cb8996ba3328fe7",
+      "geojson": "758e679f5bf6aeee4d12336500b8e315c149d11d6051a752bdfab4d073d696eb"
+    },
+    "sourceGenerationDates": [
+      "16/09/2024"
+    ],
+    "totals": [
+      {
+        "election": "426",
+        "turn": 1,
+        "office": "11",
+        "officeName": "Prefeito",
+        "rows": 131,
+        "votesIncludingBlankAndNull": 8549,
+        "sections": 33,
+        "places": 5
+      },
+      {
+        "election": "426",
+        "turn": 1,
+        "office": "13",
+        "officeName": "Vereador",
+        "rows": 1058,
+        "votesIncludingBlankAndNull": 8549,
+        "sections": 33,
+        "places": 5
+      }
+    ],
+    "verifiedAt": "2026-10-21T18:55:02.554Z",
+    "verification": "Every persisted aggregate and coordinate matches the prepared official excerpt; import audit verified.",
+    "imports": [
+      {
+        "id": "e8f8285d-3a76-4aba-bc1f-a28c9ef30b74",
+        "kind": "results",
+        "sourceUrl": "https://cdn.tse.jus.br/estatistica/sead/odsele/votacao_secao/votacao_secao_2020_PE.zip",
+        "checksum": "61153fd36252459c4327d6f911981b74fc128efbc88d54663d67f3694a72058b",
+        "rowCount": 1189,
+        "createdAt": "2026-10-21T18:51:45.621Z"
+      },
+      {
+        "id": "6c1a7488-dc83-431e-a5d9-26abfe31f1e7",
+        "kind": "places",
+        "sourceUrl": "https://cdn.tse.jus.br/estatistica/sead/odsele/eleitorado_locais_votacao/eleitorado_local_votacao_2020.zip",
+        "checksum": "18da7562ce6312caee27c49b39b84709a2bb03a7c154c9902e01268c7aadfe3f",
+        "rowCount": 5,
+        "createdAt": "2026-10-21T18:54:15.381Z"
+      }
+    ]
+  },
+  {
+    "preparedAt": "2026-10-21T18:54:27.390053+00:00",
+    "year": 2024,
+    "uf": "PE",
+    "municipalityTse": "23060",
+    "municipality": "Xexéu",
+    "resultRows": 1352,
+    "pollingPlaces": 5,
+    "sources": {
+      "results": "https://cdn.tse.jus.br/estatistica/sead/odsele/votacao_secao/votacao_secao_2024_PE.zip",
+      "places": "https://cdn.tse.jus.br/estatistica/sead/odsele/eleitorado_locais_votacao/eleitorado_local_votacao_2024.zip"
+    },
+    "sha256": {
+      "resultsArchive": "a0644bdade0339f827c345cc958fd1e9bf3f3e5834ad3e51369819912fe8efcc",
+      "placesArchive": "352ea0731f862b8a52a749f076e1b597438cfafdd03621fcc772f3076bb35aed",
+      "csv": "167fe5bf5eac979b21255c1ba768d21813b67fcc918639e563207def58c2ae4b",
+      "geojson": "ba610b4e37595165acd9366cae0bfb615bf40188890d5838f2a02185df7569ff"
+    },
+    "sourceGenerationDates": [
+      "28/10/2024"
+    ],
+    "totals": [
+      {
+        "election": "619",
+        "turn": 1,
+        "office": "11",
+        "officeName": "Prefeito",
+        "rows": 140,
+        "votesIncludingBlankAndNull": 9365,
+        "sections": 35,
+        "places": 5
+      },
+      {
+        "election": "619",
+        "turn": 1,
+        "office": "13",
+        "officeName": "Vereador",
+        "rows": 1212,
+        "votesIncludingBlankAndNull": 9365,
+        "sections": 35,
+        "places": 5
+      }
+    ],
+    "verifiedAt": "2026-10-21T18:55:03.620Z",
+    "verification": "Every persisted aggregate and coordinate matches the prepared official excerpt; import audit verified.",
+    "imports": [
+      {
+        "id": "d4d549b5-9e59-4d34-8cc9-8ef8ecdd4cb8",
+        "kind": "results",
+        "sourceUrl": "https://cdn.tse.jus.br/estatistica/sead/odsele/votacao_secao/votacao_secao_2024_PE.zip",
+        "checksum": "f6c5f15e960a283b73e8d83797a019f521c84dc69d2726afe9f67649dbe70fa9",
+        "rowCount": 1352,
+        "createdAt": "2026-10-21T18:51:02.861Z"
+      },
+      {
+        "id": "433df086-6a54-4dc3-9cbf-b895acc16182",
+        "kind": "places",
+        "sourceUrl": "https://cdn.tse.jus.br/estatistica/sead/odsele/eleitorado_locais_votacao/eleitorado_local_votacao_2024.zip",
+        "checksum": "071d090f86377848adfd0d05d0967387bb8c5a1a66e4312b753479091d25b041",
+        "rowCount": 5,
+        "createdAt": "2026-10-21T18:52:34.808Z"
+      }
+    ]
+  }
+]

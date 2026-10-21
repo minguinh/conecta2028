@@ -40,3 +40,26 @@ Dados são sempre rotulados como cobertura potencialmente parcial. O catálogo e
 Sem dependências novas: Neon HTTP para leitura, Pool transacional existente para importação, Web Crypto para hash e MapLibre carregado apenas no cliente. Conexão permanece exclusivamente no servidor em variáveis privadas. Arquivos são processados em memória e descartados após importação; nenhum upload bruto é publicado. Não configurar estas tabelas como fonte para contatos, segmentação de pessoas ou saúde.
 
 Testes: parser CSV e limites, URLs oficiais, duplicidade, valores inválidos, coordenadas, isolamento das consultas, contratos de autorização e testes HTTP em branch isolada. Antes de suportar outro layout oficial, adicionar fixtures e adapter explícito; não afrouxar a lista de colunas.
+
+## Carga oficial de Xexéu — 21/10/2026
+
+Foram importados pelo formulário autenticado de produção os recortes de Xexéu–PE, código TSE **23060**, zona **38**, das eleições municipais de 2020 e 2024, primeiro turno. A carga inclui prefeito e vereador, com as opções votáveis constantes no CSV (inclusive branco, nulo e legenda), sem dados individuais de eleitores.
+
+| Ano | Registros de votação | Seções | Locais | Votos por cargo, incluindo brancos e nulos |
+|---|---:|---:|---:|---:|
+| 2020 | 1.189 | 33 | 5 | 8.549 |
+| 2024 | 1.352 | 35 | 5 | 9.365 |
+
+Cada ano tem cinco coordenadas de locais de votação extraídas do arquivo oficial daquele ano. As seções repetidas no arquivo de locais foram deduplicadas por zona/local, conferindo igualdade das coordenadas. Não foram reaproveitadas coordenadas de outro ano nem estimadas localizações. Os arquivos de origem são os recursos **Votação por seção eleitoral — PE** e **Eleitorado por local de votação**, nos conjuntos oficiais [2020 — resultados](https://dadosabertos.tse.jus.br/dataset/resultados-2020), [2024 — resultados](https://dadosabertos.tse.jus.br/dataset/resultados-2024), [2020 — locais](https://dadosabertos.tse.jus.br/dataset/eleitorado-2020) e [2024 — locais](https://dadosabertos.tse.jus.br/dataset/eleitorado-2024).
+
+Todos os 2.541 registros persistidos e os dez pontos (cinco por ano) foram comparados campo a campo com os recortes preparados; os quatro lotes tiveram sua auditoria confirmada. O [manifesto da carga](data/xexeu-tse-importacao-2026-10-21.json) preserva URLs, hashes SHA-256 dos arquivos, datas de geração da fonte, totais conferidos e identificadores dos lotes. São dados agregados públicos; o manifesto não contém credenciais nem identificadores de usuários. Os totais não equivalem a votos válidos nem indicam situação de candidato eleito.
+
+### Reproduzir a preparação
+
+Com Python 3.11 ou superior, baixe os ZIPs oficiais indicados no manifesto e execute, para cada ano:
+
+```powershell
+python scripts/prepare-tse-xexeu.py --year 2024 --results-zip CAMINHO_VOTACAO_2024_PE.zip --places-zip CAMINHO_LOCAIS_2024.zip
+```
+
+O script lê o CSV dentro de cada ZIP sem extrair caminhos do arquivo, filtra PE/23060, confere nome e ano, preserva o cabeçalho de votação, normaliza somente identificadores e coordenadas dos locais e gera CSV, GeoJSON e manifesto em `.cloudflare-artifacts/tse-xexeu/` (ignorado pelo Git). Não lê variáveis de ambiente, não conecta ao banco e não envia dados automaticamente. Os arquivos preparados devem passar pela validação e autorização já existentes no formulário de importação.
