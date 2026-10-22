@@ -1,0 +1,52 @@
+import assert from 'node:assert/strict';
+import {readFileSync,writeFileSync} from 'node:fs';
+import {randomBytes,randomUUID,createHash} from 'node:crypto';
+import {neon} from '@neondatabase/serverless';
+import {PNG} from 'pngjs';
+process.loadEnvFile('.env.health-security');assert.equal(process.env.HEALTH_SECURITY_TEST,'true');
+const db=neon(process.env.HEALTH_DATABASE_URL_UNPOOLED);assert.equal((await db`select current_database() name`)[0].name,'health_test');
+const origin='https://conecta2028-saude-test.domingosfonseca.workers.dev';
+let checks=0;const expect=(actual,wanted)=>{assert.equal(actual,wanted);checks++;};
+const prefix='fixture-'+randomUUID(),password=randomBytes(24).toString('hex');
+async function identity(role,active=false){const id=randomUUID(),email=id+'@example.invalid',token=randomBytes(32).toString('hex');await db.transaction([db`insert into health_auth."user"(id,name,email) values(${id},'Equipe fictícia',${email})`,db`insert into health.memberships(subject_id,role,active) values(${id},${role},${active})`,db`insert into health_auth.invitations(id,user_id,token_hash,expires_at) values(${randomUUID()},${id},${createHash('sha256').update(token).digest('hex')},now()+interval '1 hour')`]);return {id,email,token};}
+async function call(path,{method='GET',body,cookie,originHeader=origin}={}){const headers={Origin:originHeader};if(cookie)headers.Cookie=cookie;if(body&&!(body instanceof FormData))headers['Content-Type']='application/json';return fetch(origin+'/api'+path,{method,headers,body:body instanceof FormData?body:body?JSON.stringify(body):undefined});}
+async function signIn(person){let r=await call('/activate',{method:'POST',body:{token:person.token,password}});expect(r.status,200);r=await call('/activate',{method:'POST',body:{token:person.token,password}});expect(r.status,400);r=await call('/auth/sign-in/email',{method:'POST',body:{email:person.email,password}});if(r.status!==200)throw Error('Login assistencial falhou: '+r.status+' '+await r.text());const cookie=r.headers.getSetCookie().map(v=>v.split(';')[0]).join('; ');assert.ok(cookie.includes('conecta-health'));return cookie;}
+const supervisor=await identity('supervisor_saude'),attendant=await identity('atendente_saude');
+const cookie=await signIn(supervisor),otherCookie=await signIn(attendant);
+writeFileSync('.cloudflare-artifacts/health-ui-test.json',JSON.stringify({email:supervisor.email,password,origin}));
+expect((await call('/patients')).status,401);
+expect((await call('/patients',{cookie:'better-auth.session_token=invalid'})).status,401);
+expect((await call('/auth/sign-up/email',{method:'POST',body:{}})).status,404);
+const patient={name:'Paciente fictício '+prefix,phone:'81999998888',cpf:'',sus:'',identity:'',birthDate:'',identifierPurpose:''};
+const input={patient,kind:'exame',details:{items:['Hemograma completo','Raio-X'],description:'',administrativeNote:'Somente teste isolado'},basis:{kind:'consentimento',purpose:'Teste automatizado sem dados reais',reference:'Fixture isolada',consented:true}};
+expect((await call('/patients',{method:'POST',cookie,originHeader:'https://example.invalid',body:input})).status,403);
+expect((await call('/patients',{method:'POST',cookie,body:{...input,basis:{...input.basis,consented:false}}})).status,400);
+expect((await call('/patients',{method:'POST',cookie,body:{...input,contactId:randomUUID()}})).status,400);
+let r=await call('/patients',{method:'POST',cookie,body:input});if(r.status!==201)throw Error('Cadastro falhou '+r.status+' '+await r.text());checks++;
+const created=await r.json();
+expect((await call('/patients/'+created.patientId,{cookie:otherCookie})).status,404);
+let record=await (await call('/patients/'+created.patientId,{cookie})).json();expect(record.requests.length,1);expect(record.requests[0].details.items.length,2);
+expect((await call('/patients/'+created.patientId,{method:'PATCH',cookie,body:{patient,version:999}})).status,409);
+const png=new PNG({width:4,height:4});png.data.fill(255);const bytes=PNG.sync.write(png);const multipart=()=>{const form=new FormData();form.append('original',new Blob([bytes],{type:'image/png'}),'teste.png');form.append('preview',new Blob([bytes],{type:'image/png'}),'pagina.png');return form;};
+expect((await call('/requests/'+created.id+'/documents',{method:'POST',cookie:otherCookie,body:multipart()})).status,404);
+r=await call('/requests/'+created.id+'/documents',{method:'POST',cookie,body:multipart()});if(r.status!==201)throw Error('Upload falhou '+r.status+' '+await r.text());checks++;
+const document=await r.json();
+expect((await call('/documents/'+document.id+'/pages/0')).status,401);
+expect((await call('/documents/'+document.id+'/pages/0',{cookie:otherCookie})).status,404);
+r=await call('/documents/'+document.id+'/pages/0',{cookie});expect(r.status,200);expect(r.headers.get('content-type'),'image/png');expect(r.headers.get('cache-control'),'private, no-store');expect(PNG.sync.read(Buffer.from(await r.arrayBuffer())).width,4);
+expect((await call('/documents/'+document.id+'/original',{cookie})).status,404);
+const [stored]=await db`select encrypted from health.private_blobs where key=${'original/'+document.id+'/0'}`;assert.ok(!stored.encrypted.includes(bytes));checks++;
+expect((await db`select count(*)::int n from health.access_logs where document_id=${document.id} and action='document.preview.read'`)[0].n,1);
+await db.query('REVOKE INSERT ON health.access_logs FROM health_runtime');
+try{expect((await call('/documents/'+document.id+'/pages/0',{cookie})).status,503);}finally{await db.query('GRANT INSERT ON health.access_logs TO health_runtime');}
+expect((await db`select count(*)::int n from health.access_logs where document_id=${document.id} and action='document.preview.read'`)[0].n,1);
+expect((await call('/requests/'+created.id+'/status',{method:'PATCH',cookie,body:{status:'encaminhada',version:2,note:'Encaminhamento fictício'}})).status,200);
+expect((await call('/requests/'+created.id+'/status',{method:'PATCH',cookie,body:{status:'encerrada',version:2,note:''}})).status,409);
+expect((await call('/requests/'+created.id+'/revoke',{method:'POST',cookie,body:{}})).status,200);
+expect((await call('/patients/'+created.patientId,{cookie})).status,403);
+expect((await call('/documents/'+document.id+'/pages/0',{cookie})).status,403);
+expect((await call('/patients?q='+encodeURIComponent(prefix),{cookie}).then(r=>r.json())).total,0);
+expect((await db`select count(*)::int n from health.access_logs where actor_id=${attendant.id} and outcome='denied'`)[0].n>=3,true);
+await db`update health.memberships set active=false where subject_id=${supervisor.id}`;
+expect((await call('/patients',{cookie})).status,403);
+console.log('PASS '+checks+' verificações HTTP no Worker Cloudflare isolado: autenticação própria, autorização, consentimento, escopo, versões, upload, PNG privado, criptografia e revogação. Apenas fixtures fictícias.');

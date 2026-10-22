@@ -1,0 +1,23 @@
+import {execFileSync,spawnSync} from 'node:child_process';
+import {readFileSync,writeFileSync,mkdirSync,existsSync} from 'node:fs';
+const git=args=>execFileSync('git',args,{encoding:'utf8',windowsHide:true}).trim();
+if(git(['status','--porcelain']))throw Error('Faça commit antes da publicação assistencial.');
+const sha=git(['rev-parse','HEAD']);
+const credential=spawnSync('git',['-c','credential.interactive=never','credential','fill'],{input:'protocol=https\nhost=github.com\n\n',encoding:'utf8',windowsHide:true});
+const token=credential.stdout?.match(/^password=(.+)$/m)?.[1];if(!token)throw Error('GitHub não autenticado.');
+const base='https://api.github.com/repos/minguinh/conecta2028',headers={Authorization:`Bearer ${token}`,Accept:'application/vnd.github+json'};
+const get=async url=>{const r=await fetch(url,{headers});if(!r.ok)throw Error('GitHub: '+r.status);return r;};
+const runs=await(await get(base+'/actions/runs?head_sha='+sha)).json(),ci=runs.workflow_runs.find(r=>r.path==='.github/workflows/check.yml');
+if(ci?.conclusion!=='success')throw Error('O CI deste commit deve passar antes da publicação assistencial.');
+const artifacts=await(await get(base+'/actions/runs/'+ci.id+'/artifacts')).json(),artifact=artifacts.artifacts.find(a=>a.name==='health-worker-assets'&&!a.expired);if(!artifact)throw Error('Artefato assistencial não encontrado.');
+mkdirSync('.cloudflare-artifacts',{recursive:true});writeFileSync('.cloudflare-artifacts/health-assets.zip',Buffer.from(await(await get(base+'/actions/artifacts/'+artifact.id+'/zip')).arrayBuffer()));
+const run=(exe,args,opts={})=>execFileSync(exe,args,{stdio:'inherit',windowsHide:true,...opts});
+const root=process.cwd();
+if(process.platform==='win32')run('powershell',['-NoProfile','-Command',`$target=Join-Path (Get-Location).Path '.health-dist/public'; if([IO.Path]::GetFullPath($target) -ne '${root.replace(/'/g,"''")}\\.health-dist\\public'){throw 'Destino inválido'}; if(Test-Path -LiteralPath $target){Remove-Item -LiteralPath $target -Recurse -Force}; Add-Type -AssemblyName System.IO.Compression.FileSystem; [IO.Compression.ZipFile]::ExtractToDirectory((Join-Path (Get-Location).Path '.cloudflare-artifacts/health-assets.zip'),$target)`]);
+else{mkdirSync('.health-dist/public',{recursive:true});run('unzip',['-oq','.cloudflare-artifacts/health-assets.zip','-d','.health-dist/public']);}
+if(readFileSync('.health-dist/public/BUILD_ID','utf8').trim()!==sha)throw Error('Artefato não corresponde ao commit.');
+if(!existsSync('modules/health/.dev.vars.production'))throw Error('Configure os secrets exclusivos do serviço assistencial.');
+if(existsSync('.cloudflare-artifacts/health-owner.txt'))run(process.execPath,['scripts/provision-health.mjs']);
+run(process.execPath,['node_modules/wrangler/bin/wrangler.js','deploy','--config','modules/health/wrangler.jsonc','--keep-vars','--message',sha,'--secrets-file','modules/health/.dev.vars.production']);
+const response=await fetch('https://conecta2028-saude.domingosfonseca.workers.dev/BUILD_ID?commit='+sha);if(!response.ok||(await response.text()).trim()!==sha)throw Error('Não foi possível confirmar a versão assistencial online.');
+console.log('CONECTA Saúde publicado e verificado: '+sha);

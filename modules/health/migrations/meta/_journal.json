@@ -15,6 +15,13 @@
       "when": 1792595116953,
       "tag": "0001_health_request_guards",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1792660812386,
+      "tag": "0002_even_tomas",
+      "breakpoints": true
     }
   ]
 }

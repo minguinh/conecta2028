@@ -42,7 +42,7 @@ Testes unitários não exigem credenciais. Testes HTTP exigem branch Neon descar
 2. Configure secrets do Worker: DATABASE_URL (pooled), BETTER_AUTH_SECRET e BETTER_AUTH_URL (URL HTTPS pública). Nunca use NEXT_PUBLIC_ para credenciais.
 3. Teste migrations em branch isolada e revise o SQL. Configure .env.production.local privado com as conexões de produção para migrations. Opcionalmente configure .dev.vars.production privado como JSON com os três secrets de runtime; sem esse arquivo, mantenha-os já configurados na Cloudflare.
 4. Execute verificações, faça commit e mantenha a árvore limpa.
-5. Execute node scripts/deploy-cloudflare.mjs. Ele envia main, aguarda o CI do mesmo commit, baixa o artefato Linux, aplica migrations se o arquivo privado existir e publica com Wrangler preservando variáveis.
+5. Execute node scripts/deploy-cloudflare.mjs. Ele envia main, aguarda o CI do mesmo commit, baixa os artefatos Linux e publica ambos os serviços com credenciais separadas. O serviço assistencial exige seu próprio arquivo privado modules/health/.dev.vars.production. Consulte o README de saúde antes do provisionamento.
 6. Confirme a versão e compare /BUILD_ID remoto com .open-next/assets/BUILD_ID. Verifique login, bloqueio de APIs sem sessão e fluxos autenticados online.
 
 O script está vinculado a este repositório/branch; ajuste identificadores para outro projeto. Builds OpenNext rodam no Linux para evitar incompatibilidades de symlinks e binários nativos no Windows. O fluxo por artefato é o caminho validado de entrega. Não aplique migrations de produção sem revisar e validar recuperação do banco.
@@ -60,6 +60,6 @@ Arquivos .env*, .dev.vars*, dependências e artefatos são ignorados, exceto exe
 - [Agenda](docs/AGENDA.md)
 - [Demandas e abertura dos cadastros](docs/DEMANDAS.md)
 - [Resultados eleitorais agregados e importação TSE](docs/RESULTADOS-ELEITORAIS.md)
-- [Saúde: arquitetura independente em preparação](modules/health/README.md)
+- [Saúde: cadastro assistencial, requisições privadas e implantação independente](modules/health/README.md)
 
-Relatórios completos e comunicação têm áreas em preparação. Perfil de saúde reservado e desabilitado. Não registrar preferências políticas individuais nem usar saúde para fins eleitorais. Logomarca original preservada em public/branding/logo-minguinho.png; menu usa sua versão transparente.
+Relatórios completos e comunicação têm áreas em preparação. O perfil de saúde no painel principal continua desabilitado; o serviço assistencial possui usuários e permissões próprios. Não registrar preferências políticas individuais nem usar saúde para fins eleitorais. Logomarca original preservada em public/branding/logo-minguinho.png; menu usa sua versão transparente.

@@ -1,0 +1,11 @@
+import {build} from 'esbuild';
+import {mkdirSync,copyFileSync,cpSync,writeFileSync,readFileSync} from 'node:fs';
+import {execFileSync} from 'node:child_process';
+const dir='.health-dist/public';mkdirSync(dir,{recursive:true});
+await build({entryPoints:['modules/health/ui/app.tsx'],bundle:true,splitting:true,format:'esm',platform:'browser',target:'es2022',outdir:dir,entryNames:'app',chunkNames:'chunk-[hash]',minify:true,define:{'process.env.NODE_ENV':'"production"'}});
+copyFileSync('public/branding/logo-minguinho-transparente.png',dir+'/logo.png');
+mkdirSync(dir+'/pdf',{recursive:true});copyFileSync('node_modules/pdfjs-dist/build/pdf.worker.min.mjs',dir+'/pdf/pdf.worker.min.mjs');
+for(const name of ['cmaps','standard_fonts','wasm'])cpSync('node_modules/pdfjs-dist/'+name,dir+'/pdf/'+name,{recursive:true});
+const sha=execFileSync('git',['rev-parse','HEAD'],{encoding:'utf8',windowsHide:true}).trim();writeFileSync(dir+'/BUILD_ID',sha);
+writeFileSync(dir+'/index.html','<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><meta name="referrer" content="no-referrer"><meta name="theme-color" content="#B90F13"><title>CONECTA Saúde — Fichas assistenciais</title><link rel="stylesheet" href="/app.css"></head><body><div id="root"></div><script type="module" src="/app.js"></script></body></html>');
+console.log('Interface assistencial compilada: '+sha);

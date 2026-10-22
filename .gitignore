@@ -13,3 +13,5 @@ node_modules/
 *.tsbuildinfo
 .next-security/
 .cloudflare-artifacts/
+
+.health-dist/

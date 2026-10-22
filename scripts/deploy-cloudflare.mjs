@@ -32,6 +32,8 @@ writeFileSync('.cloudflare-artifacts/worker.zip',archive);
 if(process.platform==='win32')run('powershell',['-NoProfile','-Command',`$target = Join-Path (Get-Location).Path '.open-next'; if ([IO.Path]::GetFullPath($target) -ne '${root.replace(/'/g,"''")}\\.open-next') { throw 'Destino inválido' }; if (Test-Path -LiteralPath $target) { Remove-Item -LiteralPath $target -Recurse -Force }; Add-Type -AssemblyName System.IO.Compression.FileSystem; [IO.Compression.ZipFile]::ExtractToDirectory((Join-Path (Get-Location).Path '.cloudflare-artifacts/worker.zip'),$target)`]);
 else {run('mkdir',['-p','.open-next']);run('unzip',['-oq','.cloudflare-artifacts/worker.zip','-d','.open-next']);}
 if(existsSync('.env.production.local'))run(process.execPath,['--env-file=.env.production.local','node_modules/drizzle-kit/bin.cjs','migrate']);
+// Separate credentials and deployment. Never give the primary Worker health secrets.
+run(process.execPath,['scripts/deploy-health.mjs']);
 const args=['node_modules/wrangler/bin/wrangler.js','deploy','--keep-vars','--message',sha];
 if(existsSync('.dev.vars.production'))args.push('--secrets-file','.dev.vars.production');
 // This app uses dummy caches and dynamic private routes. No remote cache population is needed.

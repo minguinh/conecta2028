@@ -1,53 +1,54 @@
-# Saúde — preparação de serviço independente
+# CONECTA Saúde — serviço assistencial independente
 
-**Estado:** arquitetura, modelo, migration, regras de autorização/base legal/retenção e adaptador privado preparados. Ainda não existe API operacional de saúde, integração de identidade, bucket provisionado, antivírus ou rotina de exclusão implantada. A tela `/saude` da aplicação principal informa essa preparação; não recebe nem consulta dados de saúde.
+Worker: https://conecta2028-saude.domingosfonseca.workers.dev/
 
-## Isolamento obrigatório
+Cadastro de pacientes, solicitações de exames/consultas/cirurgias, checklist, edição com versão, histórico e requisições médicas visíveis na própria ficha. O painel principal `/saude` contém somente um link para este serviço; não consulta dados assistenciais.
 
-Implantar um Worker e banco Neon próprios, com credenciais diferentes, e um bucket R2 privado exclusivo. Não usar o DATABASE_URL da aplicação principal. O schema health tem somente vínculos internos; não há FK para contatos, comunidades, demandas, campanha ou usuários da aplicação principal. O identificador de identidade é opaco e a associação de atendentes pertence ao serviço de saúde. O schema não é carregado por `src/db` nem pelas migrations principais. Não exportar dados, documentos, protocolos ou indicadores de saúde a módulos eleitorais, comunicação política ou relatórios do painel.
+## Isolamento e permissões
 
-O serviço de identidade futuro deve validar assinatura, emissor, audiência, validade e sessão revogável antes de obter memberships no servidor. Não aceitar cargo, sujeito ou principal enviados pelo navegador. Sem esse adaptador, nenhuma rota de dados pode ser ativada. Não compartilhar cookies, secrets ou tokens do painel para autorizar saúde automaticamente. Administrador geral do painel não ganha acesso a prontuários/documentos.
+Banco Neon, Worker, Better Auth, memberships, chaves e cookies próprios. Não há importação de contatos, FKs, IDs comuns ou exportação de dados para módulos eleitorais. O administrador geral do painel não ganha acesso assistencial. Não existe integração com regulação oficial nem alteração de filas, prioridades clínicas ou agendamentos oficiais.
 
-## Permissões específicas
+- Atendente: apenas fichas e solicitações sob sua responsabilidade.
+- Supervisor: fichas da equipe, validação de outra base e auditoria.
+- Encarregado de privacidade: permissões específicas do domínio; sem leitura automática de documentos. A interface de gestão de equipe/privacidade não está incluída nesta versão.
 
-- Atendente de saúde: solicitações atribuídas a si, documentos e registro de base legal.
-- Supervisor de saúde: solicitações da equipe de saúde e auditoria.
-- Encarregado de privacidade de saúde: base legal, auditoria e execução de retenção; sem leitura automática de documentos.
+Sessão revogável de oito horas, cookie host-only Secure/HttpOnly/SameSite, sem cache de sessão, cadastro público desabilitado e limite persistente de tentativas de login. Convite de uso único, senha individual de 12–128 caracteres definida pela pessoa. Não há senha padrão ou envio automático de e-mails. Recuperação exige verificação pela supervisão e novo convite controlado.
 
-`policy.ts` recusa perfis gerais, contas inativas, identidade não autenticada, registros restritos e acesso fora da responsabilidade. Essas funções são regras do domínio; o futuro servidor ainda deve carregar identidade, membership, atribuição e política de fontes confiáveis e validar autorização em cada operação. O perfil reservado na aplicação principal continua desabilitado.
+Nome obrigatório; telefone opcional; CPF, CNS/SUS, identidade e nascimento opcionais, com justificativa quando preenchidos. Identificadores e detalhes dos procedimentos usam AES-256-GCM com AAD por registro. CPF/CNS usam HMAC para prevenir duplicidade. Nome e telefone ficam acessíveis somente ao serviço autorizado. Não registrar informações clínicas desnecessárias em notas administrativas.
 
-## Dados e protocolos
+Cada solicitação exige finalidade, evidência, aviso versionado e consentimento explícito ou outra base validada pela supervisão. A entrega de documentos não preenche a autorização automaticamente. Revogação restringe imediatamente solicitação e anexos; a ficha também fica inacessível se nenhuma solicitação tiver base ativa.
 
-Nome necessário ao atendimento, contato opcional, tipo administrativo (exame, consulta ou cirurgia), protocolo aleatório, atendente, versão, andamento, política e expiração. Não há CPF, cartão SUS, diagnóstico, CID, prioridade clínica, posição em fila ou campo para modificar agendamento oficial. Estados: recebida, documentação pendente, encaminhada, aguardando retorno, encerrada e cancelada. Esses estados não representam situação oficial de regulação. Notas limitadas a 500 caracteres e somente encaminhamentos administrativos.
+## Upload e visualização privada
 
-## Base legal e consentimento
+R2 não estava habilitado na conta. Esta versão armazena arquivos em `health.private_blobs`, no **banco exclusivo de saúde**, sem bucket ou URL pública. Originais de até 8 MB (PDF/JPG/PNG) são validados por assinatura, criptografados e divididos em blocos. Permanecem em quarentena, **sem endpoint de download ou liberação automática**.
 
-Nenhuma base é presumida. Antes de liberar o registro restrito, exigir finalidade específica, referência de evidência, versão do aviso, data e responsável pela validação. Consentimento exige manifestação explícita; outra base exige referência e aprovação registrada. Os valores técnicos não determinam a adequação jurídica da base: a equipe responsável deve avaliar cada finalidade, inclusive dados sensíveis.
+O navegador gera até seis páginas PNG por arquivo. PDF.js é usado somente para renderização em canvas, sem executar ações ou scripts do documento. Imagens também passam por canvas. O atendente confere as páginas antes do envio. O servidor aceita apenas PNG RGBA limitado, verifica tamanho, dimensões, expansão DEFLATE e CRC, descarta metadados e reencodifica os pixels. Isso não equivale a antivírus nem comprova a correspondência entre original e cópia; cabe ao atendente conferir. A disponibilização futura do original depende de análise de malware.
 
-Fluxo de revogação: registrar data/evento → restringir imediatamente consultas e documentos → encaminhar à privacidade → avaliar outra base efetivamente aplicável ou exclusão. Não trocar automaticamente a base apenas para manter o tratamento. O servidor deverá registrar concessão, revisão, recusa e revogação; o schema preserva eventos até a exclusão autorizada.
+Limites: cinco anexos por solicitação, seis páginas por anexo, 1 MB por prévia, 2 milhões de pixels por página e corpo multipart de até 16 MB. PDF.js e recursos são servidos na mesma origem. Sem analytics, fichas em localStorage ou service worker.
 
-## Documentos privados
+A leitura acontece em modal dentro da ficha, com paginação. `GET /api/documents/:id/pages/:n` exige sessão, membership, atribuição, validade, base e auditoria durável antes de servir PNG com no-store e nosniff. Falha de auditoria impede a leitura. Não há links públicos nem envio a analisadores externos.
 
-`private-documents.ts` valida tamanho (8 MB) e assinaturas PDF/JPEG/PNG. Armazena com chave aleatória, sem nome ou documento pessoal no caminho, em quarentena. Download só após verificação e mudança autorizada para disponível. O analisador de malware deve ser integrado antes da ativação; reconhecer a assinatura de um arquivo não prova sua segurança.
+## Auditoria, retenção e exclusão
 
-Não habilitar r2.dev, domínio público, CORS amplo nem URLs públicas ou pré-assinadas. O Worker deve devolver o arquivo por endpoint autenticado, após permissão e log durável, com no-store, attachment e nosniff. A auditoria indisponível bloqueia a leitura. Persistir metadados e limpar órfãos/quarentena com rotina compensatória, sem liberar arquivos antes da conclusão do fluxo.
+Responsável confirmado: Domingos Leandro da Fonseca Junior. Política `assistencial-6-anos-2026-10-22`: **seis anos calendários por solicitação**. Nova solicitação estende somente a ficha mestre até a maior expiração; não prolonga anexos ou solicitações anteriores. Fichas e solicitações vencidas são bloqueadas antes da limpeza física.
 
-O adaptador não está conectado a uma API. As chamadas de `log`, membership, política e metadata devem vir do servidor, nunca do cliente. Logs não contêm corpo do documento, nome, telefone ou descrição clínica.
+Triggers exigem ator ativo e contexto e registram alterações sem copiar conteúdo clínico. Logs append-only para runtime; apenas `health_retention_service` pode excluir logs expirados. Cron diário às 06:17 UTC remove solicitações vencidas em lotes de 25 com cascata transacional para documentos, blobs, bases e histórico, remove fichas vencidas sem solicitações e grava comprovantes mínimos em erasure_jobs. Suspensão exige referência e data final. Monitorar falhas do agendador; o procedimento de privacidade supervisiona pedidos antecipados de exclusão e obrigações de conservação.
 
-## Retenção e exclusão
+O projeto Neon foi verificado com janela de restauração/PITR de **21.600 segundos (6 horas)**. A exclusão na base ativa não remove instantaneamente cópias recuperáveis do provedor. Após restauração, reaplicar comprovantes de exclusão e rodar a limpeza antes de reabrir acesso. Só afirmar destruição completa após expiração das cópias abrangidas pela política. Manter chave AES em backup privado, com acesso restrito e plano de rotação.
 
-Não há prazo padrão. A ativação exige política versionada e aprovada para solicitações, auditoria e backups. Cada solicitação recebe expires_at; eventual suspensão exige referência e data final, sem retenção indefinida. `retention.ts` organiza: elegibilidade → reserva atômica do job e restrição do registro → exclusão idempotente dos objetos → exclusão transacional dos dados e conclusão → comprovante mínimo com expiração. Falha em R2 impede conclusão e remoção prematura das referências; o job deve ser retomado.
+## Verificação e implantação
 
-O agendador e adaptadores transacionais ainda precisam ser implementados e implantados, com credenciais de retenção próprias. A auditoria é append-only para o serviço comum; uma identidade de banco exclusiva `health_retention_service` poderá excluir apenas eventos já expirados. A política deve tratar expiração dos backups e reaplicação de exclusões após restauração. Não afirmar que houve eliminação completa enquanto documentos ou cópias recuperáveis abrangidas pela política permanecerem retidos.
+```sh
+pnpm exec tsc -p modules/health/tsconfig.json --noEmit
+pnpm test
+node scripts/build-health.mjs
+pnpm exec wrangler deploy --config modules/health/wrangler.jsonc --dry-run
+```
 
-## Verificação isolada
+UI React/TypeScript compilada com esbuild, API Worker nodejs_compat e portal principal Next.js App Router. PDF.js é exclusivo do navegador. A sanitização usa fast-png/fflate em JavaScript puro; pngjs usa internos zlib incompatíveis com Worker e fica apenas nas fixtures de teste.
 
-`pnpm test` cobre permissões, base legal, retenção, arquivos e falhas de exclusão. `scripts/verify-health-schema.mjs` requer banco descartável vazio chamado health_test e `.env.health-security` com HEALTH_DATABASE_URL_UNPOOLED e HEALTH_SECURITY_TEST=true. Valida as migrations, FKs internas, contexto de auditoria obrigatório, histórico, liberação com base legal, restrição após revogação e imutabilidade da auditoria. Nunca usar dados reais.
+Migrations Drizzle exclusivas em modules/health/migrations, incluindo health_auth. Nunca aplicar no banco principal. `scripts/provision-health.mjs` verifica banco/região, aplica migrations e concessões mínimas e provisiona o supervisor inativo com convite de sete dias, entregue privadamente. Não define senha. Nome e e-mail vêm de HEALTH_SUPERVISOR_NAME e HEALTH_SUPERVISOR_EMAIL no arquivo privado `.env.health-setup`. O script está vinculado ao projeto assistencial e requer conexão de proprietário em `.cloudflare-artifacts/health-owner.txt`, nunca enviada ao Worker. Para outro ambiente, revisar identificadores e provisionamento antes de executar.
 
-## Migrations e ativação
+Testes de integração exigem banco descartável health_test, `.env.health-security` e HEALTH_SECURITY_TEST=true. `scripts/verify-health-schema.mjs` valida integridade e auditoria. `scripts/verify-health-http.mjs` aponta exclusivamente para o Worker de teste e cria somente fixtures fictícias; valida autenticação, consentimento, escopo, versões, criptografia, upload, leitura, falha de auditoria e revogação. `node --import tsx scripts/verify-health-retention.mjs` valida expiração, cascata dos anexos, suspensão e comprovantes idempotentes. Descartar Worker e banco de teste após a verificação. Não copiar dados reais.
 
-Gerar com `pnpm exec drizzle-kit generate --config modules/health/drizzle.config.ts`. Aplicar exclusivamente em banco independente com `HEALTH_DATABASE_URL_UNPOOLED` usando `pnpm exec drizzle-kit migrate --config modules/health/drizzle.config.ts`. Testar antes em banco descartável. Não incluir esse comando no deploy da aplicação principal.
-
-Antes de ativar: configurar identidade e memberships próprios, política aprovada, atendimento aos direitos do titular, Worker/API com autorização em todos os handlers, bucket privado, antivírus, logs de acesso/mutação, transações, job de retenção, expiração de backups, credenciais de menor privilégio e testes de isolamento. A preparação não autoriza integração com regulação: nenhuma API oficial, sincronização, fila, prioridade clínica ou agendamento oficial foi implementado.
-
-Referências: [LGPD, texto oficial](https://www.planalto.gov.br/ccivil_03/_ato2015-2018/2018/lei/l13709.htm), especialmente dados sensíveis e término do tratamento; [privacidade de buckets R2](https://developers.cloudflare.com/r2/buckets/public-buckets/). A definição de base aplicável e prazos cabe à política aprovada, não a um valor escolhido automaticamente pelo aplicativo.
+O CI valida tipos/testes e builds de ambos os serviços. `node scripts/deploy-cloudflare.mjs` aguarda o CI do mesmo commit e publica ambos, chamando `scripts/deploy-health.mjs` com artefato assistencial aprovado. Secrets próprios em `modules/health/.dev.vars.production`, nunca no Worker principal. Conferir BUILD_ID nos dois serviços, APIs sem sessão e fluxos autenticados. Exemplos sem segredos em `.env.example`.

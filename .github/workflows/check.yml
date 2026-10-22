@@ -19,6 +19,9 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - run: pnpm check
       - run: pnpm test
+      - run: pnpm exec tsc -p modules/health/tsconfig.json --noEmit
+      - run: node scripts/build-health.mjs
+      - run: pnpm exec wrangler deploy --config modules/health/wrangler.jsonc --dry-run
       - run: pnpm build
       - run: node scripts/verify-client-bundle.mjs
       - run: pnpm exec opennextjs-cloudflare build --skipNextBuild
@@ -26,5 +29,11 @@ jobs:
         with:
           name: cloudflare-worker
           path: .open-next/
+          include-hidden-files: true
+          retention-days: 3
+      - uses: actions/upload-artifact@v4
+        with:
+          name: health-worker-assets
+          path: .health-dist/public/
           include-hidden-files: true
           retention-days: 3

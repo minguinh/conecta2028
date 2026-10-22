@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';import {neon} from '@neondatabase/server
 process.loadEnvFile('.env.health-security');assert.equal(process.env.HEALTH_SECURITY_TEST,'true','Use only the isolated health_test database.');const db=neon(process.env.HEALTH_DATABASE_URL_UNPOOLED);
 assert.equal((await db`SELECT current_database() AS name`)[0].name,'health_test');
 assert.equal((await db`SELECT count(*)::int n FROM health.requests`)[0].n,0,'Use an empty test database.');
-assert.equal((await db`SELECT count(*)::int n FROM information_schema.tables WHERE table_schema='health'`)[0].n,7);
+assert.equal((await db`SELECT count(*)::int n FROM information_schema.tables WHERE table_schema='health'`)[0].n,9);
 assert.equal((await db`SELECT count(*)::int n FROM information_schema.tables WHERE table_schema='public' AND table_name IN ('contacts','demands','user')`)[0].n,0);
 assert.equal((await db`SELECT count(*)::int n FROM pg_constraint c JOIN pg_class a ON a.oid=c.conrelid JOIN pg_namespace an ON an.oid=a.relnamespace JOIN pg_class b ON b.oid=c.confrelid JOIN pg_namespace bn ON bn.oid=b.relnamespace WHERE c.contype='f' AND an.nspname='health' AND bn.nspname<>'health'`)[0].n,0);
 const actor='isolated-health-test',id=randomUUID();await db`INSERT INTO health.memberships(subject_id,role,active) VALUES (${actor},'atendente_saude',true)`;

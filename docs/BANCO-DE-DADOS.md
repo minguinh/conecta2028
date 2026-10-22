@@ -37,7 +37,7 @@ O backfill preserva exatamente os dados já documentados e usa a origem `migraca
 - `0014_spooky_shockwave.sql`: índices das FKs de perfil e localidades de agenda/demandas.
 - `0015_blue_war_machine.sql`: acompanhamento de demandas, prazos, prioridade administrativa, encerramento, versão e auditoria/atividades atômicas.
 
-Saúde tem schema, banco e migrations independentes em `modules/health`, fora deste fluxo. O deploy principal não aplica migrations de saúde.
+Saúde tem banco, schemas health/health_auth e migrations independentes em `modules/health`, fora das conexões deste fluxo. O comando de entrega chama um processo de implantação assistencial separado, que utiliza apenas suas próprias credenciais e migrations. Nenhuma tabela ou conexão de saúde é carregada pelo Worker principal.
 
 As migrations anteriores preservam o histórico dos cadastros, autenticação, PostGIS, contatos e agenda. Não foram reescritas migrations já publicadas.
 

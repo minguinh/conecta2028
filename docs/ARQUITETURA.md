@@ -46,6 +46,6 @@ Identidade visual e logo original preservadas. Estados vazios representam ausên
 
 CI verifica tipos, testes, build, fronteira cliente/servidor e bundle antes do artefato Linux. O deploy publica o commit aprovado e aplica migrations controladas. Não há envio automático de e-mails, recuperação de senha por e-mail nem monitoramento externo configurados.
 
-## Saúde independente (preparação)
+## Saúde independente
 
-`modules/health` contém schema e migrations separados, regras de acesso próprio, base legal, protocolos administrativos, documentos privados em quarentena, auditoria e contratos de retenção/exclusão. Não é importado pelo banco ou backend principal. `/saude` é apenas uma tela de preparação para o administrador, sem acesso a pacientes ou documentos. Banco, Worker, identidade, bucket e política de saúde precisam de configuração própria antes da ativação. Não existe integração com regulação oficial ou dados eleitorais. Veja `modules/health/README.md`.
+`modules/health` é um serviço separado: Worker, Neon, Better Auth, memberships, migrations e chaves próprios. `/saude` contém apenas o link de entrada; o backend principal não importa o serviço nem consulta pacientes ou documentos. A UI assistencial React usa esbuild; a aplicação comunitária permanece Next.js. Requisições têm originais criptografados em quarentena no banco privado e cópias PNG sanitizadas servidas mediante autorização e auditoria durável. O formulário permite exames, consultas e cirurgias, checklist, dados mínimos, base explícita e retenção aprovada de seis anos. Não há vínculos com contatos nem integração com regulação ou dados eleitorais. Veja [operação, limites, testes e implantação](../modules/health/README.md).
