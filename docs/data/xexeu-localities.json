@@ -1,0 +1,394 @@
+{
+  "municipalityCode": "2616506",
+  "referenceYear": 2022,
+  "preparedAt": "2026-10-23",
+  "archiveSha256": "1d96d5f0b379972a506d4b18c3696af974fbe59f8f6680557cb3a6dd38a0eb57",
+  "notes": [
+    "Pontos do IBGE representam localidades, não domicílios nem limites de bairros.",
+    "Lista inicial consolidada, sem garantia de exaustividade. Não atribuir coordenadas por proximidade ou sem fonte.",
+    "Campos Frios: núcleo urbano no IBGE e denominado distrito no documento municipal; API distrital do IBGE lista apenas Xexéu.",
+    "Bom Mirar, Bomirar e Bom Mirá preservados como denominações distintas até revisão; não mesclar automaticamente."
+  ],
+  "localities": [
+    {
+      "name": "Xexéu",
+      "kind": "distrito",
+      "latitude": -8.805399894714355,
+      "longitude": -35.627201080322266,
+      "source": "IBGE - Localidades do Brasil 2022",
+      "sourceUrl": "https://geoftp.ibge.gov.br/organizacao_do_territorio/estrutura_territorial/localidades/Localidades_do_Brasil/2022/Localidades_Brasil_gpkg.zip",
+      "sourceCode": "2616506",
+      "category": "Cidade"
+    },
+    {
+      "name": "Campos Frios",
+      "kind": "distrito",
+      "latitude": -8.873600006103516,
+      "longitude": -35.62580108642578,
+      "source": "IBGE - Localidades do Brasil 2022",
+      "sourceUrl": "https://geoftp.ibge.gov.br/organizacao_do_territorio/estrutura_territorial/localidades/Localidades_do_Brasil/2022/Localidades_Brasil_gpkg.zip",
+      "sourceCode": "2616506001",
+      "category": "Núcleo Urbano"
+    },
+    {
+      "name": "Limão",
+      "kind": "engenho",
+      "latitude": -8.816699981689453,
+      "longitude": -35.69490051269531,
+      "source": "IBGE - Localidades do Brasil 2022",
+      "sourceUrl": "https://geoftp.ibge.gov.br/organizacao_do_territorio/estrutura_territorial/localidades/Localidades_do_Brasil/2022/Localidades_Brasil_gpkg.zip",
+      "sourceCode": "261650600002",
+      "category": "Povoado"
+    },
+    {
+      "name": "Bom Mirar",
+      "kind": "comunidade_rural",
+      "latitude": -8.832099914550781,
+      "longitude": -35.67449951171875,
+      "source": "IBGE - Localidades do Brasil 2022",
+      "sourceUrl": "https://geoftp.ibge.gov.br/organizacao_do_territorio/estrutura_territorial/localidades/Localidades_do_Brasil/2022/Localidades_Brasil_gpkg.zip",
+      "sourceCode": "261650600003",
+      "category": "Outras Localidades"
+    },
+    {
+      "name": "Engenho Veneza",
+      "kind": "engenho",
+      "latitude": -8.789899826049805,
+      "longitude": -35.6515998840332,
+      "source": "IBGE - Localidades do Brasil 2022",
+      "sourceUrl": "https://geoftp.ibge.gov.br/organizacao_do_territorio/estrutura_territorial/localidades/Localidades_do_Brasil/2022/Localidades_Brasil_gpkg.zip",
+      "sourceCode": "261650600004",
+      "category": "Outras Localidades"
+    },
+    {
+      "name": "Engenho Porto Seguro",
+      "kind": "engenho",
+      "latitude": -8.839699745178223,
+      "longitude": -35.59130096435547,
+      "source": "IBGE - Localidades do Brasil 2022",
+      "sourceUrl": "https://geoftp.ibge.gov.br/organizacao_do_territorio/estrutura_territorial/localidades/Localidades_do_Brasil/2022/Localidades_Brasil_gpkg.zip",
+      "sourceCode": "261650600005",
+      "category": "Povoado"
+    },
+    {
+      "name": "Bomirar",
+      "kind": "comunidade_rural",
+      "latitude": -8.833200454711914,
+      "longitude": -35.65589904785156,
+      "source": "IBGE - Localidades do Brasil 2022",
+      "sourceUrl": "https://geoftp.ibge.gov.br/organizacao_do_territorio/estrutura_territorial/localidades/Localidades_do_Brasil/2022/Localidades_Brasil_gpkg.zip",
+      "sourceCode": "261650600007",
+      "category": "Outras Localidades"
+    },
+    {
+      "name": "Alaíde Gonçalves",
+      "kind": "bairro",
+      "latitude": null,
+      "longitude": null,
+      "source": "Prefeitura de Xexéu - Edital 001/2025, localidades do Anexo V e quadro de vagas",
+      "sourceUrl": "https://www.diariomunicipal.com.br/amupe/materia/FD829BA0",
+      "sourceCode": null,
+      "category": "Denominação municipal; enquadramento operacional, sem delimitação oficial"
+    },
+    {
+      "name": "Boa Vista",
+      "kind": "bairro",
+      "latitude": null,
+      "longitude": null,
+      "source": "Prefeitura de Xexéu - Edital 001/2025, localidades do Anexo V e quadro de vagas",
+      "sourceUrl": "https://www.diariomunicipal.com.br/amupe/materia/FD829BA0",
+      "sourceCode": null,
+      "category": "Denominação municipal; enquadramento operacional, sem delimitação oficial"
+    },
+    {
+      "name": "Alto da Boa Vista",
+      "kind": "bairro",
+      "latitude": null,
+      "longitude": null,
+      "source": "Prefeitura de Xexéu - Edital 001/2025, localidades do Anexo V e quadro de vagas",
+      "sourceUrl": "https://www.diariomunicipal.com.br/amupe/materia/FD829BA0",
+      "sourceCode": null,
+      "category": "Denominação municipal; enquadramento operacional, sem delimitação oficial"
+    },
+    {
+      "name": "Nova Xexéu",
+      "kind": "bairro",
+      "latitude": null,
+      "longitude": null,
+      "source": "Prefeitura de Xexéu - Edital 001/2025, localidades do Anexo V e quadro de vagas",
+      "sourceUrl": "https://www.diariomunicipal.com.br/amupe/materia/FD829BA0",
+      "sourceCode": null,
+      "category": "Denominação municipal; enquadramento operacional, sem delimitação oficial"
+    },
+    {
+      "name": "Pedra Letrada",
+      "kind": "bairro",
+      "latitude": null,
+      "longitude": null,
+      "source": "Prefeitura de Xexéu - Edital 001/2025, localidades do Anexo V e quadro de vagas",
+      "sourceUrl": "https://www.diariomunicipal.com.br/amupe/materia/FD829BA0",
+      "sourceCode": null,
+      "category": "Denominação municipal; enquadramento operacional, sem delimitação oficial"
+    },
+    {
+      "name": "Centro",
+      "kind": "bairro",
+      "latitude": null,
+      "longitude": null,
+      "source": "Prefeitura de Xexéu - Edital 001/2025, localidades do Anexo V e quadro de vagas",
+      "sourceUrl": "https://www.diariomunicipal.com.br/amupe/materia/FD829BA0",
+      "sourceCode": null,
+      "category": "Denominação municipal; enquadramento operacional, sem delimitação oficial"
+    },
+    {
+      "name": "Canaã",
+      "kind": "bairro",
+      "latitude": null,
+      "longitude": null,
+      "source": "Prefeitura de Xexéu - Edital 001/2025, localidades do Anexo V e quadro de vagas",
+      "sourceUrl": "https://www.diariomunicipal.com.br/amupe/materia/FD829BA0",
+      "sourceCode": null,
+      "category": "Denominação municipal; enquadramento operacional, sem delimitação oficial"
+    },
+    {
+      "name": "Nova Canaã",
+      "kind": "bairro",
+      "latitude": null,
+      "longitude": null,
+      "source": "Prefeitura de Xexéu - Edital 001/2025, localidades do Anexo V e quadro de vagas",
+      "sourceUrl": "https://www.diariomunicipal.com.br/amupe/materia/FD829BA0",
+      "sourceCode": null,
+      "category": "Denominação municipal; enquadramento operacional, sem delimitação oficial"
+    },
+    {
+      "name": "Alto da Capela",
+      "kind": "bairro",
+      "latitude": null,
+      "longitude": null,
+      "source": "Prefeitura de Xexéu - Edital 001/2025, localidades do Anexo V e quadro de vagas",
+      "sourceUrl": "https://www.diariomunicipal.com.br/amupe/materia/FD829BA0",
+      "sourceCode": null,
+      "category": "Denominação municipal; enquadramento operacional, sem delimitação oficial"
+    },
+    {
+      "name": "Bairro Novo",
+      "kind": "bairro",
+      "latitude": null,
+      "longitude": null,
+      "source": "Prefeitura de Xexéu - Edital 001/2025, localidades do Anexo V e quadro de vagas",
+      "sourceUrl": "https://www.diariomunicipal.com.br/amupe/materia/FD829BA0",
+      "sourceCode": null,
+      "category": "Denominação municipal; enquadramento operacional, sem delimitação oficial"
+    },
+    {
+      "name": "Sete de Setembro",
+      "kind": "bairro",
+      "latitude": null,
+      "longitude": null,
+      "source": "Prefeitura de Xexéu - Edital 001/2025, localidades do Anexo V e quadro de vagas",
+      "sourceUrl": "https://www.diariomunicipal.com.br/amupe/materia/FD829BA0",
+      "sourceCode": null,
+      "category": "Denominação municipal; enquadramento operacional, sem delimitação oficial"
+    },
+    {
+      "name": "Alice Gonçalves",
+      "kind": "bairro",
+      "latitude": null,
+      "longitude": null,
+      "source": "Prefeitura de Xexéu - Edital 001/2025, localidades do Anexo V e quadro de vagas",
+      "sourceUrl": "https://www.diariomunicipal.com.br/amupe/materia/FD829BA0",
+      "sourceCode": null,
+      "category": "Denominação municipal; enquadramento operacional, sem delimitação oficial"
+    },
+    {
+      "name": "Engenho Beleza",
+      "kind": "engenho",
+      "latitude": null,
+      "longitude": null,
+      "source": "Prefeitura de Xexéu - Edital 001/2025, localidades do Anexo V e quadro de vagas",
+      "sourceUrl": "https://www.diariomunicipal.com.br/amupe/materia/FD829BA0",
+      "sourceCode": null,
+      "category": "Denominação municipal; enquadramento operacional, sem delimitação oficial"
+    },
+    {
+      "name": "Engenho Canto Flor",
+      "kind": "engenho",
+      "latitude": null,
+      "longitude": null,
+      "source": "Prefeitura de Xexéu - Edital 001/2025, localidades do Anexo V e quadro de vagas",
+      "sourceUrl": "https://www.diariomunicipal.com.br/amupe/materia/FD829BA0",
+      "sourceCode": null,
+      "category": "Denominação municipal; enquadramento operacional, sem delimitação oficial"
+    },
+    {
+      "name": "Engenho Curupaiti",
+      "kind": "engenho",
+      "latitude": null,
+      "longitude": null,
+      "source": "Prefeitura de Xexéu - Edital 001/2025, localidades do Anexo V e quadro de vagas",
+      "sourceUrl": "https://www.diariomunicipal.com.br/amupe/materia/FD829BA0",
+      "sourceCode": null,
+      "category": "Denominação municipal; enquadramento operacional, sem delimitação oficial"
+    },
+    {
+      "name": "Engenho Fernandes Vieira",
+      "kind": "engenho",
+      "latitude": null,
+      "longitude": null,
+      "source": "Prefeitura de Xexéu - Edital 001/2025, localidades do Anexo V e quadro de vagas",
+      "sourceUrl": "https://www.diariomunicipal.com.br/amupe/materia/FD829BA0",
+      "sourceCode": null,
+      "category": "Denominação municipal; enquadramento operacional, sem delimitação oficial"
+    },
+    {
+      "name": "Engenho Caiçara",
+      "kind": "engenho",
+      "latitude": null,
+      "longitude": null,
+      "source": "Prefeitura de Xexéu - Edital 001/2025, localidades do Anexo V e quadro de vagas",
+      "sourceUrl": "https://www.diariomunicipal.com.br/amupe/materia/FD829BA0",
+      "sourceCode": null,
+      "category": "Denominação municipal; enquadramento operacional, sem delimitação oficial"
+    },
+    {
+      "name": "Engenho Boa Sorte",
+      "kind": "engenho",
+      "latitude": null,
+      "longitude": null,
+      "source": "Prefeitura de Xexéu - Edital 001/2025, localidades do Anexo V e quadro de vagas",
+      "sourceUrl": "https://www.diariomunicipal.com.br/amupe/materia/FD829BA0",
+      "sourceCode": null,
+      "category": "Denominação municipal; enquadramento operacional, sem delimitação oficial"
+    },
+    {
+      "name": "Engenho Vila Rica",
+      "kind": "engenho",
+      "latitude": null,
+      "longitude": null,
+      "source": "Prefeitura de Xexéu - Edital 001/2025, localidades do Anexo V e quadro de vagas",
+      "sourceUrl": "https://www.diariomunicipal.com.br/amupe/materia/FD829BA0",
+      "sourceCode": null,
+      "category": "Denominação municipal; enquadramento operacional, sem delimitação oficial"
+    },
+    {
+      "name": "Engenho Cavaco",
+      "kind": "engenho",
+      "latitude": null,
+      "longitude": null,
+      "source": "Prefeitura de Xexéu - Edital 001/2025, localidades do Anexo V e quadro de vagas",
+      "sourceUrl": "https://www.diariomunicipal.com.br/amupe/materia/FD829BA0",
+      "sourceCode": null,
+      "category": "Denominação municipal; enquadramento operacional, sem delimitação oficial"
+    },
+    {
+      "name": "Engenho Macaco",
+      "kind": "engenho",
+      "latitude": null,
+      "longitude": null,
+      "source": "Prefeitura de Xexéu - Edital 001/2025, localidades do Anexo V e quadro de vagas",
+      "sourceUrl": "https://www.diariomunicipal.com.br/amupe/materia/FD829BA0",
+      "sourceCode": null,
+      "category": "Denominação municipal; enquadramento operacional, sem delimitação oficial"
+    },
+    {
+      "name": "Engenho Macaquinho",
+      "kind": "engenho",
+      "latitude": null,
+      "longitude": null,
+      "source": "Prefeitura de Xexéu - Edital 001/2025, localidades do Anexo V e quadro de vagas",
+      "sourceUrl": "https://www.diariomunicipal.com.br/amupe/materia/FD829BA0",
+      "sourceCode": null,
+      "category": "Denominação municipal; enquadramento operacional, sem delimitação oficial"
+    },
+    {
+      "name": "Ipiranga",
+      "kind": "comunidade_rural",
+      "latitude": null,
+      "longitude": null,
+      "source": "Prefeitura de Xexéu - Edital 001/2025, localidades do Anexo V e quadro de vagas",
+      "sourceUrl": "https://www.diariomunicipal.com.br/amupe/materia/FD829BA0",
+      "sourceCode": null,
+      "category": "Denominação municipal; enquadramento operacional, sem delimitação oficial"
+    },
+    {
+      "name": "Casas Novas",
+      "kind": "comunidade_rural",
+      "latitude": null,
+      "longitude": null,
+      "source": "Prefeitura de Xexéu - Edital 001/2025, localidades do Anexo V e quadro de vagas",
+      "sourceUrl": "https://www.diariomunicipal.com.br/amupe/materia/FD829BA0",
+      "sourceCode": null,
+      "category": "Denominação municipal; enquadramento operacional, sem delimitação oficial"
+    },
+    {
+      "name": "Apodi",
+      "kind": "comunidade_rural",
+      "latitude": null,
+      "longitude": null,
+      "source": "Prefeitura de Xexéu - Edital 001/2025, localidades do Anexo V e quadro de vagas",
+      "sourceUrl": "https://www.diariomunicipal.com.br/amupe/materia/FD829BA0",
+      "sourceCode": null,
+      "category": "Denominação municipal; enquadramento operacional, sem delimitação oficial"
+    },
+    {
+      "name": "Bom Mirá",
+      "kind": "comunidade_rural",
+      "latitude": null,
+      "longitude": null,
+      "source": "Prefeitura de Xexéu - Edital 001/2025, localidades do Anexo V e quadro de vagas",
+      "sourceUrl": "https://www.diariomunicipal.com.br/amupe/materia/FD829BA0",
+      "sourceCode": null,
+      "category": "Denominação municipal; enquadramento operacional, sem delimitação oficial"
+    },
+    {
+      "name": "Os Lotes",
+      "kind": "comunidade_rural",
+      "latitude": null,
+      "longitude": null,
+      "source": "Prefeitura de Xexéu - Edital 001/2025, localidades do Anexo V e quadro de vagas",
+      "sourceUrl": "https://www.diariomunicipal.com.br/amupe/materia/FD829BA0",
+      "sourceCode": null,
+      "category": "Denominação municipal; enquadramento operacional, sem delimitação oficial"
+    },
+    {
+      "name": "Divisão",
+      "kind": "comunidade_rural",
+      "latitude": null,
+      "longitude": null,
+      "source": "Prefeitura de Xexéu - Edital 001/2025, localidades do Anexo V e quadro de vagas",
+      "sourceUrl": "https://www.diariomunicipal.com.br/amupe/materia/FD829BA0",
+      "sourceCode": null,
+      "category": "Denominação municipal; enquadramento operacional, sem delimitação oficial"
+    },
+    {
+      "name": "Oriental",
+      "kind": "comunidade_rural",
+      "latitude": null,
+      "longitude": null,
+      "source": "Prefeitura de Xexéu - Edital 001/2025, localidades do Anexo V e quadro de vagas",
+      "sourceUrl": "https://www.diariomunicipal.com.br/amupe/materia/FD829BA0",
+      "sourceCode": null,
+      "category": "Denominação municipal; enquadramento operacional, sem delimitação oficial"
+    },
+    {
+      "name": "Humaitá",
+      "kind": "comunidade_rural",
+      "latitude": null,
+      "longitude": null,
+      "source": "Prefeitura de Xexéu - Edital 001/2025, localidades do Anexo V e quadro de vagas",
+      "sourceUrl": "https://www.diariomunicipal.com.br/amupe/materia/FD829BA0",
+      "sourceCode": null,
+      "category": "Denominação municipal; enquadramento operacional, sem delimitação oficial"
+    },
+    {
+      "name": "Areial",
+      "kind": "comunidade_rural",
+      "latitude": null,
+      "longitude": null,
+      "source": "Prefeitura de Xexéu - Edital 001/2025, localidades do Anexo V e quadro de vagas",
+      "sourceUrl": "https://www.diariomunicipal.com.br/amupe/materia/FD829BA0",
+      "sourceCode": null,
+      "category": "Denominação municipal; enquadramento operacional, sem delimitação oficial"
+    }
+  ]
+}

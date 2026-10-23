@@ -7,17 +7,14 @@ import { type Actor } from './authorization';
 import { HttpError,string,readJsonBody } from './http';
 import { coordinatePair,parseGeometry,parseBoundaries } from './geo-validation';
 import { localityKinds,type TerritoryData } from './territory-types';
+import {buildTerritoryQuery} from './territory-query';
 export const ibgeUrl='https://servicodados.ibge.gov.br/api/v3/malhas/municipios/2616506?formato=application/vnd.geo+json&qualidade=maxima';
 export const readTerritoryBody=(request:Pick<Request,'headers'|'body'>)=>readJsonBody(request,2_000_000);
 async function authorizeWrite(tx:Transaction,actor:Actor){const row=await tx.execute(sql`SELECT id FROM "user" WHERE id=${actor.id} AND active=true AND role IN ('administrador_geral','coordenador') FOR SHARE`);if(!row.rows.length)throw new HttpError(403,'Somente administradores e coordenadores gerenciam o território.');}
 function kind(value:unknown){if(typeof value!=='string'||!Object.hasOwn(localityKinds,value))throw new HttpError(400,'Tipo de localidade inválido.');return value;}
 const geometrySql=(g:unknown)=>g?sql`ST_Force2D(ST_SetSRID(ST_GeomFromGeoJSON(${JSON.stringify(g)}),4326))`:sql`NULL`;
 async function validatePostgis(tx:Transaction,g:unknown){if(!g)return;const result=await tx.execute(sql`SELECT ST_IsValid(${geometrySql(g)}) AS valid,ST_IsValidReason(${geometrySql(g)}) AS reason`);if(!result.rows[0]?.valid)throw new HttpError(400,'Geometria inválida no PostGIS. Verifique cruzamentos e anéis do polígono.');}
-export async function getTerritory(actor:Actor):Promise<TerritoryData>{const scope=actor.role==='assessor'?sql`c.id IN (SELECT community_id FROM activities WHERE assigned_to=${actor.id} UNION SELECT community_id FROM visits WHERE assigned_to=${actor.id} UNION SELECT community_id FROM demands WHERE assigned_to=${actor.id} UNION SELECT community_id FROM contacts WHERE assigned_to=${actor.id})`:sql`true`;const activityScope=actor.role==='assessor'?sql`a.assigned_to=${actor.id}`:actor.role==='analista'?sql`false`:sql`true`;
- const data=await getDb().execute(sql`SELECT json_build_object(
- 'localities',coalesce((SELECT json_agg(r) FROM (SELECT c.id,c.name,c.description,c.kind,c.latitude,c.longitude,c.version,ST_AsGeoJSON(c.geom)::json AS geometry FROM communities c WHERE ${scope} ORDER BY c.name,c.id LIMIT 1001)r),'[]'::json),
- 'activities',coalesce((SELECT json_agg(r) FROM (SELECT a.id,a.title,a.community_id AS "communityId",c.name AS community,a.assigned_to AS "assignedTo",a.version,ST_X(a.geom) AS longitude,ST_Y(a.geom) AS latitude FROM activities a LEFT JOIN communities c ON c.id=a.community_id WHERE ${activityScope} ORDER BY a.occurred_at DESC,a.id LIMIT 1001)r),'[]'::json),
- 'boundaries',coalesce((SELECT json_agg(r) FROM (SELECT id,name,source,source_url AS "sourceUrl",verified,imported_at AS "importedAt",ST_AsGeoJSON(geom)::json AS geometry FROM territorial_boundaries ORDER BY imported_at DESC LIMIT 101)r),'[]'::json)) AS data`);
+export async function getTerritory(actor:Actor):Promise<TerritoryData>{const data=await getDb().execute(buildTerritoryQuery(actor));
  const result=data.rows[0].data as TerritoryData;result.truncated=result.localities.length>1000||result.activities.length>1000||result.boundaries.length>100;result.localities=result.localities.slice(0,1000);result.activities=result.activities.slice(0,1000);result.boundaries=result.boundaries.slice(0,100);return result;
 }
 export async function saveLocality(actor:Actor,input:Record<string,unknown>,id?:string){const name=string(input.name,'Nome',150),type=kind(input.kind),description=input.description?string(input.description,'Descrição',3000):null,point=coordinatePair(input.latitude,input.longitude),geometry=parseGeometry(input.geometry);if(id&&(!Number.isInteger(input.version)||Number(input.version)<1))throw new HttpError(400,'Versão do registro ausente. Recarregue a página.');

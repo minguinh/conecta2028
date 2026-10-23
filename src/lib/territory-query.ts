@@ -1,0 +1,10 @@
+import {sql} from 'drizzle-orm';
+import type {Role} from './permissions';
+export function buildTerritoryQuery(actor:{id:string;role:Role}){const scope=actor.role==='assessor'?sql`c.id IN (SELECT community_id FROM activities WHERE assigned_to=${actor.id} UNION SELECT community_id FROM visits WHERE assigned_to=${actor.id} UNION SELECT community_id FROM demands WHERE assigned_to=${actor.id} UNION SELECT community_id FROM contacts WHERE assigned_to=${actor.id})`:sql`true`;const activityScope=actor.role==='assessor'?sql`a.assigned_to=${actor.id}`:actor.role==='analista'?sql`false`:sql`true`;
+ const contactScope=actor.role==='assessor'?sql`ct.assigned_to=${actor.id}`:sql`true`;
+ return sql`SELECT json_build_object(
+ 'contactSummary',(SELECT json_build_object('total',count(*)::int,'withoutLocality',count(*) FILTER(WHERE ct.community_id IS NULL)::int,'withoutCoordinates',count(*) FILTER(WHERE ct.community_id IS NOT NULL AND (lc.latitude IS NULL OR lc.longitude IS NULL))::int) FROM contacts ct LEFT JOIN communities lc ON lc.id=ct.community_id WHERE ${contactScope}),
+ 'localities',coalesce((SELECT json_agg(r) FROM (SELECT c.id,c.name,c.description,c.kind,c.latitude,c.longitude,c.version,(SELECT count(*)::int FROM contacts ct WHERE ct.community_id=c.id AND ${contactScope}) AS "contactCount",ST_AsGeoJSON(c.geom)::json AS geometry FROM communities c WHERE ${scope} ORDER BY c.name,c.id LIMIT 1001)r),'[]'::json),
+ 'activities',coalesce((SELECT json_agg(r) FROM (SELECT a.id,a.title,a.community_id AS "communityId",c.name AS community,a.assigned_to AS "assignedTo",a.version,ST_X(a.geom) AS longitude,ST_Y(a.geom) AS latitude FROM activities a LEFT JOIN communities c ON c.id=a.community_id WHERE ${activityScope} ORDER BY a.occurred_at DESC,a.id LIMIT 1001)r),'[]'::json),
+ 'boundaries',coalesce((SELECT json_agg(r) FROM (SELECT id,name,source,source_url AS "sourceUrl",verified,imported_at AS "importedAt",ST_AsGeoJSON(geom)::json AS geometry FROM territorial_boundaries ORDER BY imported_at DESC LIMIT 101)r),'[]'::json)) AS data`;
+}

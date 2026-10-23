@@ -10,6 +10,20 @@ O registro usa a tabela existente `communities`, preservando suas referências e
 
 ## Mapa e fontes
 
+### Catálogo inicial e contagens
+
+Em 23/10/2026 foi consolidado `docs/data/xexeu-localities.json`: 38 denominações públicas, sete com pontos do catálogo **Localidades do Brasil 2022**, do IBGE, e demais nomes extraídos do Edital municipal 001/2025. Não é uma lista exaustiva ou uma malha legal de bairros. Coordenadas ausentes permanecem nulas; bairros não recebem o ponto da sede municipal nem coordenadas inferidas por proximidade.
+
+Campos Frios é núcleo urbano no catálogo IBGE e denominado distrito pelo documento municipal; a API distrital do IBGE lista apenas Xexéu. Esse contexto fica na descrição. Bom Mirar, Bomirar e Bom Mirá não são mesclados automaticamente. Tipos operacionais da lista municipal não substituem delimitação ou classificação legal. Fontes: [catálogo IBGE](https://geoftp.ibge.gov.br/organizacao_do_territorio/estrutura_territorial/localidades/Localidades_do_Brasil/2022/), [edital municipal](https://www.diariomunicipal.com.br/amupe/materia/FD829BA0).
+
+O importador administrativo `scripts/import-xexeu-localities.mjs --actor-email <administrador>` simula a transação e faz rollback por padrão. `--apply` importa com auditoria, permissão atual de administrador e bloqueio contra concorrência. Preserva registros existentes, não sobrescreve coordenadas preenchidas e só completa pontos faltantes com a fonte IBGE. Repetições são idempotentes. A lista consolidada, metadados e SHA-256 da fonte ficam versionados; arquivos baixados ficam fora do Git.
+
+O mapa mostra **contatos cadastrados por localidade**, calculados por `contacts.community_id`, sem retornar nomes, telefones ou endereços de contatos à camada. Os círculos variam com a quantidade e o popup/lista informa o total. Não há classificação individual de apoio, intenção ou promessa de voto nem junção com resultados eleitorais ou saúde. Resultados históricos TSE permanecem no módulo próprio.
+
+Indicadores distinguem total de contatos, sem vínculo territorial e vinculados a localidades sem coordenadas. Cadastro sem localidade não é distribuído automaticamente entre bairros. Zero é uma contagem real, não ausência de informação. Assessores contam apenas contatos atribuídos a si; administradores/coordenadores e analistas recebem agregados conforme seu escopo. Atividades começam ocultas e podem ser habilitadas separadamente.
+
+`node --env-file=<ambiente> --import tsx scripts/verify-territory-counts.mjs` verifica o SQL real com fixtures CTE, sem inserir dados no banco. Cobre ausência de localidade/coordenadas, contagens por vínculo e escopos de acesso. Testes unitários verificam o catálogo, parâmetros e ausência de colunas pessoais ou políticas na agregação.
+
 MapLibre GL JS renderiza as camadas e exige WebGL2. A base padrão usa tiles raster OpenStreetMap no navegador, com atribuição visível, cache normal do navegador e sem download em massa ou prefetch offline. `NEXT_PUBLIC_MAP_STYLE_URL` permite substituir a base por um provedor próprio.
 
 A referência municipal vem da API oficial do IBGE para o código `2616506`. O arquivo `public/geo/xexeu-ibge.geojson` preserva a resposta obtida; `public/geo/xexeu-source.json` registra URL, data de consulta e metadados oficiais. O centro inicial do mapa usa o centroide retornado pelo IBGE. A referência pode ser ocultada no controle de camadas.
